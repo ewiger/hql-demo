@@ -26,3 +26,29 @@ kind = "postgres"
 dsn_env = "DEMO_DSN"
 table = "order_archive"
 order = ["id"]
+
+# The raw events a producer sends, some of them not an `Event`.
+[endpoint.raw_events]
+kind = "json"
+path = "raw-events.json"
+
+# The topic they travel through, read as `Data`.
+[endpoint.order_events_raw]
+kind = "kafka"
+brokers_env = "KAFKA_BROKERS"
+topic = "order_events_raw"
+idle_ms = 2000
+
+# The table the events arrive in.
+[endpoint.order_clean]
+kind = "postgres"
+dsn_env = "DEMO_DSN"
+table = "order_clean"
+order = ["id"]
+
+# The table the rejected messages arrive in, with their reasons.
+[endpoint.order_quarantine]
+kind = "postgres"
+dsn_env = "DEMO_DSN"
+table = "order_quarantine"
+order = ["id"]

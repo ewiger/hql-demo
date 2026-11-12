@@ -1,6 +1,6 @@
 # A PostgreSQL server and a Kafka broker side by side, for the programs
 # that move events between them, and a one-shot container that creates the
-# topic. The host reaches PostgreSQL on localhost:55432 and the broker on
+# topics. The host reaches PostgreSQL on localhost:55432 and the broker on
 # localhost:59092.
 name: hql-demo-kafka-postgres
 
@@ -49,5 +49,7 @@ services:
         condition: service_healthy
     entrypoint: ["/bin/sh", "-c"]
     command:
-      - /opt/kafka/bin/kafka-topics.sh --bootstrap-server kafka:19092 --create --if-not-exists --topic order_events --partitions 1 --replication-factor 1
+      - >
+        /opt/kafka/bin/kafka-topics.sh --bootstrap-server kafka:19092 --create --if-not-exists --topic order_events --partitions 1 --replication-factor 1 &&
+        /opt/kafka/bin/kafka-topics.sh --bootstrap-server kafka:19092 --create --if-not-exists --topic order_events_raw --partitions 1 --replication-factor 1
     restart: "no"
