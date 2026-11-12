@@ -12,6 +12,7 @@ the output with `expected/`.
 | [`postgres/`](postgres/) | PostgreSQL 17 | Write the mock events to a table, then read it back as a report per customer |
 | [`kafka-postgres/`](kafka-postgres/) | both | Postgres to Kafka: a table's rows to a topic. Kafka to Postgres: the topic's messages into a second table. Quarantine: raw messages routed into a clean table or a quarantine table, with reasons |
 | [`nats/`](nats/) | NATS 2.11 with JetStream | Publish the mock events to a subject, one message each, then read the subject back from its stream: by id, by a transport written in the program, and through a durable consumer that remembers where the last read ended |
+| [`nats-core/`](nats-core/) | NATS 2.11 without JetStream | A subscriber on a wildcard subject, started first, given the mock events a publisher sends to a subject per kind of event |
 | [`lakehouse/`](lakehouse/) | Spark 3.5, Delta Lake 3.3, MinIO | Write the mock events to a Delta table, then read it back as a report per customer |
 | [`nats-lakehouse/`](nats-lakehouse/) | all of the above | Raw messages on a subject routed into a silver Delta table or a dead-letter subject, then the silver table totalled into a gold Delta table |
 
@@ -28,12 +29,12 @@ another one.
 
 Each case starts its containers, runs its programs, and removes the
 containers and their volumes when it ends. The host ports are 59092 for
-Kafka, 55432 for PostgreSQL, 54222 for NATS and 50001 for the Spark SQL
-endpoint.
+Kafka, 55432 for PostgreSQL, 54222 for NATS with JetStream, 54223 for core
+NATS and 50001 for the Spark SQL endpoint.
 
 The NATS and lakehouse cases need an `hql` built from the
-`feat/nats-lakehouse` branch or later, which has the `nats` and `spark`
-kinds. The first lakehouse run builds an image of Spark with Delta Lake and
+`feat/nats-lakehouse` branch or later, which has the `nats`,
+`nats_jetstream` and `spark` kinds. The first lakehouse run builds an image of Spark with Delta Lake and
 the S3 connector; the build downloads about 300 MB of jars, once.
 
 ## Source and tap
@@ -91,15 +92,20 @@ is the whole program.
 
 ## Subjects and lakehouse tables
 
-NATS and a lakehouse sit on the same two sides of that line. A JetStream
-stream keeps the messages published to its subjects, so a subject is a log:
-`kind = "nats"` is read by `tap` and written by `sink`, and each message is
-written once the stream acknowledges it. A lakehouse table ends:
+NATS and a lakehouse sit on the same two sides of that line. NATS is two
+kinds, each with a module of its own:
+
+| Kind | Module | A read is given | A write is confirmed |
+| --- | --- | --- | --- |
+| `nats` | `io.msg.nats` | what is published while it is subscribed | by nothing |
+| `nats_jetstream` | `io.msg.nats_jetstream` | what the stream keeps, from where the read says | by the stream, which stored it |
+
+Both are read by `tap` and written by `sink`. A lakehouse table ends:
 `kind = "spark"` is read by `source` and written by `target` or `sink`.
 
 ```toml
 [endpoint.orders_raw]
-kind = "nats"
+kind = "nats_jetstream"
 url_env = "NATS_URL"
 stream = "ORDERS"
 subject = "orders.raw"
@@ -113,6 +119,25 @@ order = ["id"]
 mode = "append"
 ```
 
+### A core subject
+
+Core NATS keeps nothing, so a reader must be subscribed before a writer
+publishes. [`nats-core/run.sh`](nats-core/run.sh) starts
+[`subscribe.hql`](nats-core/subscribe.hql) in the background on the
+wildcard `orders.>`, then runs [`publish.hql`](nats-core/publish.hql), which
+sends each event to `orders.<kind>` through the constructor of
+`io.msg.nats`:
+
+```hql
+import io.msg.nats
+
+subject = (kind: String) => nats("orders." + kind, url_env = "NATS_URL")
+for_kind("order_placed") | sink(subject("order_placed"))
+```
+
+The subscriber ends once the subjects have been quiet for `idle_ms`, and
+what it printed is compared with what is expected.
+
 ### A position the server keeps
 
 A stream stores messages. A consumer is the server's record of how far one
@@ -122,7 +147,7 @@ the one before acknowledged.
 
 ```toml
 [endpoint.billing]
-kind = "nats"
+kind = "nats_jetstream"
 url_env = "NATS_URL"
 stream = "EVENTS"
 subject = "events.orders"
@@ -137,15 +162,15 @@ run that fails or stops early is given its last message again.
 
 ### A subject without configuration
 
-The `nats` kind is also the transport `Nats` of the module `io.msg.nats`,
-whose constructor takes the kind's keys.
+The `nats_jetstream` kind is also the transport `NatsJetStream` of the
+module `io.msg.nats_jetstream`, whose constructor takes the kind's keys.
 [`nats/by-constructor.hql`](nats/by-constructor.hql) reads the subject with
 no endpoint in `hql.toml`:
 
 ```hql
-import io.msg.nats
+import io.msg.nats_jetstream
 
-orders = nats("events.orders", stream = "EVENTS", url_env = "NATS_URL", idle_ms = 2000)
+orders = nats_jetstream("events.orders", stream = "EVENTS", url_env = "NATS_URL", idle_ms = 2000)
 tap(orders) | filter(e => e.kind == "order_placed")
 ```
 
