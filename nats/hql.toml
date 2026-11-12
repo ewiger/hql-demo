@@ -16,3 +16,14 @@ subject = "events.orders"
 # A stream never ends; the read ends once no message has arrived for two
 # seconds, so a program that reads it to the end terminates.
 idle_ms = 2000
+
+# The same subject read through the durable consumer `billing`: the server
+# keeps the position under that name, so each read starts after the last
+# message the read before it acknowledged.
+[endpoint.billing]
+kind = "nats"
+url_env = "NATS_URL"
+stream = "EVENTS"
+subject = "events.orders"
+consumer = "billing"
+idle_ms = 2000
