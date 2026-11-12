@@ -1,0 +1,25 @@
+# The run context of the lakehouse use case: the mock events, and the Delta
+# table they are written to and read back from. The endpoint's address is
+# named by an environment variable, so the same programs run against the
+# Spark Thrift Server in docker-compose.yml and against a Databricks SQL
+# warehouse.
+
+[endpoint.mock_events]
+kind = "json"
+path = "events.json"
+
+[endpoint.events]
+kind = "spark"
+url_env = "LAKEHOUSE_URL"
+# Set for a Databricks warehouse, which asks for a personal access token.
+# The local Thrift Server asks for none, so run.sh leaves it out.
+# token_env = "LAKEHOUSE_TOKEN"
+table = "default.events"
+order = ["id"]
+# Each run replaces the rows the table holds, in one commit.
+mode = "replace"
+
+# A DECIMAL column states its precision and scale, so the boundary names
+# the type `amount` is written as.
+[endpoint.events.fields.amount]
+type = "DECIMAL(12,2)"

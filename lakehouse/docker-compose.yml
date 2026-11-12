@@ -1,0 +1,43 @@
+# An open-source lakehouse: a Spark Thrift Server that keeps Delta Lake
+# tables in a MinIO bucket, and a one-shot container that creates the
+# bucket. The host reaches the SQL endpoint on localhost:50001.
+name: hql-demo-lakehouse
+
+services:
+  # MinIO publishes no image of its own any longer; this is Chainguard's
+  # build of the same server.
+  minio:
+    image: cgr.dev/chainguard/minio:latest-dev
+    command: ["server", "/tmp/data"]
+    environment:
+      MINIO_ROOT_USER: lakehouse
+      MINIO_ROOT_PASSWORD: lakehouse-secret
+    healthcheck:
+      test: ["CMD-SHELL", "wget -q -O /dev/null http://localhost:9000/minio/health/ready"]
+      interval: 2s
+      timeout: 5s
+      retries: 30
+
+  buckets:
+    image: cgr.dev/chainguard/minio:latest-dev
+    depends_on:
+      minio:
+        condition: service_healthy
+    entrypoint: ["/bin/sh", "-c"]
+    command:
+      - mc alias set lake http://minio:9000 lakehouse lakehouse-secret && mc mb --ignore-existing lake/lakehouse
+    restart: "no"
+
+  spark:
+    build: ./spark
+    image: hql-demo-spark-delta:3.5.6
+    depends_on:
+      minio:
+        condition: service_healthy
+    ports:
+      - "50001:10001"
+    healthcheck:
+      test: ["CMD-SHELL", "bash -c '</dev/tcp/localhost/10001'"]
+      interval: 3s
+      timeout: 5s
+      retries: 60

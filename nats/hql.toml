@@ -1,0 +1,29 @@
+# The run context of the NATS use case: the mock events, and the subject
+# they are published to and read back from. The server is named by an
+# environment variable, so the same programs run against any server.
+
+[endpoint.mock_events]
+kind = "json"
+path = "events.json"
+
+# The stream `EVENTS` holds every subject under `events.`; this endpoint
+# is the one subject `events.orders` within it.
+[endpoint.events]
+kind = "nats_jetstream"
+url_env = "NATS_URL"
+stream = "EVENTS"
+subject = "events.orders"
+# A stream never ends; the read ends once no message has arrived for two
+# seconds, so a program that reads it to the end terminates.
+idle_ms = 2000
+
+# The same subject read through the durable consumer `billing`: the server
+# keeps the position under that name, so each read starts after the last
+# message the read before it acknowledged.
+[endpoint.billing]
+kind = "nats_jetstream"
+url_env = "NATS_URL"
+stream = "EVENTS"
+subject = "events.orders"
+consumer = "billing"
+idle_ms = 2000
