@@ -1,0 +1,16 @@
+# The run context of the core NATS use case: the mock events, a subject
+# per kind of event they are published to, and a wildcard that reads all
+# of them. No stream keeps any of it.
+
+[endpoint.mock_events]
+kind = "json"
+path = "events.json"
+
+# Every subject under `orders.`, read by one subscription. A wildcard is
+# read and never published to.
+[endpoint.orders]
+kind = "nats"
+url_env = "NATS_URL"
+subject = "orders.>"
+# The subscription ends once no message has arrived for three seconds.
+idle_ms = 3000
