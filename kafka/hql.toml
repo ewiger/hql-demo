@@ -2,11 +2,11 @@
 # they are written to and read back from. The brokers are named by an
 # environment variable, so the same programs run against any cluster.
 
-[sources.mock_events]
+[endpoint.mock_events]
 kind = "json"
 path = "events.json"
 
-[sources.events]
+[endpoint.events]
 kind = "kafka"
 brokers_env = "KAFKA_BROKERS"
 topic = "events"

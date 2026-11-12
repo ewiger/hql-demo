@@ -2,7 +2,7 @@
 
 Use cases for [HQL](https://github.com/ewiger/hql) against real systems, each
 in its own folder with the Docker Compose file that starts what it needs. A
-folder is an HQL vault: its `hql.toml` configures the sources its programs
+folder is an HQL vault: its `hql.toml` configures the endpoints its programs
 read and write by id, and its `run.sh` runs the case end to end and compares
 the output with `expected/`.
 
