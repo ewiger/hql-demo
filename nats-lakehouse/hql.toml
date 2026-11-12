@@ -10,7 +10,7 @@ path = "raw-events.json"
 
 # The subject they are published to, read as `Data`.
 [endpoint.orders_raw]
-kind = "nats"
+kind = "nats_jetstream"
 url_env = "NATS_URL"
 stream = "ORDERS"
 subject = "orders.raw"
@@ -18,7 +18,7 @@ idle_ms = 2000
 
 # The dead-letter subject: each rejected message, with the rules it broke.
 [endpoint.orders_rejected]
-kind = "nats"
+kind = "nats_jetstream"
 url_env = "NATS_URL"
 stream = "ORDERS"
 subject = "orders.rejected"

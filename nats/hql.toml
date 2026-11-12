@@ -9,7 +9,7 @@ path = "events.json"
 # The stream `EVENTS` holds every subject under `events.`; this endpoint
 # is the one subject `events.orders` within it.
 [endpoint.events]
-kind = "nats"
+kind = "nats_jetstream"
 url_env = "NATS_URL"
 stream = "EVENTS"
 subject = "events.orders"
@@ -21,7 +21,7 @@ idle_ms = 2000
 # keeps the position under that name, so each read starts after the last
 # message the read before it acknowledged.
 [endpoint.billing]
-kind = "nats"
+kind = "nats_jetstream"
 url_env = "NATS_URL"
 stream = "EVENTS"
 subject = "events.orders"
