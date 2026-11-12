@@ -1,0 +1,1 @@
+[{"amount":120.50,"at":"2026-11-01T09:15:00Z","customer":"ada","id":1,"kind":"order_placed"},{"amount":42.00,"at":"2026-11-01T09:20:00Z","customer":"grace","id":2,"kind":"order_placed"},{"amount":42.00,"at":"2026-11-01T09:21:00Z","customer":"grace","id":4,"kind":"payment_failed"},{"amount":120.50,"at":"2026-11-02T08:00:00Z","customer":"ada","id":6,"kind":"order_shipped"}]

@@ -1,0 +1,4 @@
+{"id":3,"message":{"amount":"free","at":"2026-11-01T09:40:00Z","customer":"linus","id":3,"kind":"order_placed"},"rules":["EventData.amount.type"]}
+{"id":5,"message":{"amount":7.99,"at":"2026-11-01T10:02:00Z","id":5,"kind":"order_placed"},"rules":["EventData.customer.missing"]}
+{"id":7,"message":{"amount":-15.25,"at":"2026-11-02T11:45:00Z","customer":"ada","id":7,"kind":"order_placed"},"rules":["EventData.non_negative"]}
+{"id":8,"message":{"amount":7.99,"at":"2026-11-02T12:10:00Z","customer":"linus","id":8,"kind":"order_cancelled"},"rules":["EventData.known_kind"]}

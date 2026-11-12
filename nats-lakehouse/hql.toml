@@ -1,0 +1,48 @@
+# The run context of the NATS-lakehouse use case: raw events on a subject,
+# a silver table of the ones that are valid, a dead-letter subject for the
+# ones that are not, and a gold table of revenue per customer. Addresses
+# are named by environment variables.
+
+# The raw events a producer sends, some of them not an `Event`.
+[endpoint.raw_events]
+kind = "json"
+path = "raw-events.json"
+
+# The subject they are published to, read as `Data`.
+[endpoint.orders_raw]
+kind = "nats"
+url_env = "NATS_URL"
+stream = "ORDERS"
+subject = "orders.raw"
+idle_ms = 2000
+
+# The dead-letter subject: each rejected message, with the rules it broke.
+[endpoint.orders_rejected]
+kind = "nats"
+url_env = "NATS_URL"
+stream = "ORDERS"
+subject = "orders.rejected"
+idle_ms = 2000
+
+# Silver: the Delta table the valid events arrive in, appended as they
+# come.
+[endpoint.orders_silver]
+kind = "spark"
+url_env = "LAKEHOUSE_URL"
+table = "default.orders_silver"
+order = ["id"]
+mode = "append"
+
+[endpoint.orders_silver.fields.amount]
+type = "DECIMAL(12,2)"
+
+# Gold: revenue per customer, replaced whole by each run of revenue.hql.
+[endpoint.customer_revenue]
+kind = "spark"
+url_env = "LAKEHOUSE_URL"
+table = "default.customer_revenue"
+order = ["customer"]
+mode = "replace"
+
+[endpoint.customer_revenue.fields.total]
+type = "DECIMAL(12,2)"
