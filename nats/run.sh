@@ -1,0 +1,16 @@
+#!/usr/bin/env bash
+# The NATS use case, end to end: start the server, publish the mock events
+# to a subject, read them back from the stream, compare, and stop the
+# server.
+set -euo pipefail
+cd "$(dirname "$0")"
+source ../bin/hql-bin.sh
+
+export NATS_URL=nats://localhost:54222
+trap 'docker compose down -v >/dev/null 2>&1' EXIT
+docker compose up -d --wait nats >/dev/null 2>&1
+docker compose run --rm streams >/dev/null 2>&1
+
+"$HQL" run --to none produce.hql
+echo "ok   produce.hql"
+expect consume.hql expected/consume.json

@@ -1,0 +1,25 @@
+# One NATS server with JetStream, and a one-shot container that creates the
+# stream the programs use. The host reaches the server on localhost:54222.
+name: hql-demo-nats
+
+services:
+  nats:
+    image: nats:2.11-alpine
+    command: ["-js", "-m", "8222"]
+    ports:
+      - "54222:4222"
+    healthcheck:
+      test: ["CMD-SHELL", "wget -q -O /dev/null http://localhost:8222/healthz"]
+      interval: 2s
+      timeout: 5s
+      retries: 30
+
+  streams:
+    image: natsio/nats-box:0.18.0
+    depends_on:
+      nats:
+        condition: service_healthy
+    entrypoint: ["/bin/sh", "-c"]
+    command:
+      - nats --server nats://nats:4222 stream add EVENTS --subjects 'events.>' --defaults
+    restart: "no"
