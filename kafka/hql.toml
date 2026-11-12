@@ -1,0 +1,15 @@
+# The run context of the Kafka use case: the mock events, and the topic
+# they are written to and read back from. The brokers are named by an
+# environment variable, so the same programs run against any cluster.
+
+[sources.mock_events]
+kind = "json"
+path = "events.json"
+
+[sources.events]
+kind = "kafka"
+brokers_env = "KAFKA_BROKERS"
+topic = "events"
+# A topic never ends; the stream ends once no message has arrived for
+# two seconds, so a program that reads it to the end terminates.
+idle_ms = 2000

@@ -1,0 +1,28 @@
+# The run context of the Kafka-Postgres use case: the mock events, two
+# tables and one topic between them. Secrets and addresses are named by
+# environment variables.
+
+[sources.mock_events]
+kind = "json"
+path = "events.json"
+
+# The table the events start in.
+[sources.orders]
+kind = "postgres"
+dsn_env = "DEMO_DSN"
+table = "orders"
+order = ["id"]
+
+# The topic they travel through.
+[sources.order_events]
+kind = "kafka"
+brokers_env = "KAFKA_BROKERS"
+topic = "order_events"
+idle_ms = 2000
+
+# The table they arrive in.
+[sources.order_archive]
+kind = "postgres"
+dsn_env = "DEMO_DSN"
+table = "order_archive"
+order = ["id"]

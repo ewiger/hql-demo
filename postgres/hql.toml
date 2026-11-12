@@ -1,0 +1,16 @@
+# The run context of the Postgres use case: the mock events, and the table
+# they are written to and read back from. The connection string holds a
+# password, so it is never written here: `dsn_env` names the environment
+# variable that holds it.
+
+[sources.mock_events]
+kind = "json"
+path = "events.json"
+
+[sources.events]
+kind = "postgres"
+dsn_env = "DEMO_DSN"
+table = "events"
+order = ["id"]
+# Each run replaces the rows the table holds.
+mode = "replace"
