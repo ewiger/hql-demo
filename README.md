@@ -11,7 +11,7 @@ the output with `expected/`.
 | [`kafka/`](kafka/) | Kafka 3.9 | Write the mock events from `events.json` to a topic, one message each, then read the topic back |
 | [`postgres/`](postgres/) | PostgreSQL 17 | Write the mock events to a table, then read it back as a report per customer |
 | [`kafka-postgres/`](kafka-postgres/) | both | Postgres to Kafka: a table's rows to a topic. Kafka to Postgres: the topic's messages into a second table. Quarantine: raw messages routed into a clean table or a quarantine table, with reasons |
-| [`nats/`](nats/) | NATS 2.11 with JetStream | Publish the mock events to a subject, one message each, then read the subject back from its stream |
+| [`nats/`](nats/) | NATS 2.11 with JetStream | Publish the mock events to a subject, one message each, then read the subject back from its stream: by id, by a transport written in the program, and through a durable consumer that remembers where the last read ended |
 | [`lakehouse/`](lakehouse/) | Spark 3.5, Delta Lake 3.3, MinIO | Write the mock events to a Delta table, then read it back as a report per customer |
 | [`nats-lakehouse/`](nats-lakehouse/) | all of the above | Raw messages on a subject routed into a silver Delta table or a dead-letter subject, then the silver table totalled into a gold Delta table |
 
@@ -112,6 +112,45 @@ table = "default.orders_silver"
 order = ["id"]
 mode = "append"
 ```
+
+### A position the server keeps
+
+A stream stores messages. A consumer is the server's record of how far one
+reader has come in it, and `consumer = "billing"` names a durable one: the
+first read creates it, and every later read starts after the last message
+the one before acknowledged.
+
+```toml
+[endpoint.billing]
+kind = "nats"
+url_env = "NATS_URL"
+stream = "EVENTS"
+subject = "events.orders"
+consumer = "billing"
+idle_ms = 2000
+```
+
+[`nats/run.sh`](nats/run.sh) runs [`nats/resume.hql`](nats/resume.hql)
+twice: the first run prints every event's id and the second prints nothing.
+A message is acknowledged once the program asks for the one after it, so a
+run that fails or stops early is given its last message again.
+
+### A subject without configuration
+
+The `nats` kind is also the transport `Nats` of the module `io.msg.nats`,
+whose constructor takes the kind's keys.
+[`nats/by-constructor.hql`](nats/by-constructor.hql) reads the subject with
+no endpoint in `hql.toml`:
+
+```hql
+import io.msg.nats
+
+orders = nats("events.orders", stream = "EVENTS", url_env = "NATS_URL", idle_ms = 2000)
+tap(orders) | filter(e => e.kind == "order_placed")
+```
+
+A constructed transport has no schema boundary, so each message is read as
+`Data`.
 
 ### The lakehouse
 
