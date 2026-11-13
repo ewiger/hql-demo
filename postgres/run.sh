@@ -7,8 +7,7 @@ source ../bin/hql-bin.sh
 
 export DEMO_DSN="host=localhost port=55432 user=hql password=hql dbname=demo"
 trap 'docker compose down -v >/dev/null 2>&1' EXIT
-docker compose up -d --wait postgres >/dev/null 2>&1
+up postgres
 
-"$HQL" run --to none load.hql
-echo "ok   load.hql"
+run load.hql
 expect report.hql expected/report.json

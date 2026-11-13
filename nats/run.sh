@@ -9,11 +9,10 @@ source ../bin/hql-bin.sh
 
 export NATS_URL=nats://localhost:54222
 trap 'docker compose down -v >/dev/null 2>&1' EXIT
-docker compose up -d --wait nats >/dev/null 2>&1
-docker compose run --rm streams >/dev/null 2>&1
+up nats
+once streams
 
-"$HQL" run --to none produce.hql
-echo "ok   produce.hql"
+run produce.hql
 expect consume.hql expected/consume.json
 expect by-constructor.hql expected/by-constructor.json
 expect resume.hql expected/resume-first.json

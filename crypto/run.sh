@@ -13,24 +13,13 @@ chmod 600 keys/rfc8032-test-1.pem
 rm -rf work && mkdir work
 trap 'rm -rf work' EXIT
 
-# Compare a command's compact JSON output with an expected file.
-check() {
-  local name="$1" expected="$2" actual
-  shift 2
-  actual="$("$@")" || { echo "FAIL $name: hql failed" >&2; return 1; }
-  if [ "$actual" = "$(cat "$expected")" ]; then
-    echo "ok   $name"
-  else
-    echo "FAIL $name" >&2
-    diff <(echo "$actual") "$expected" >&2 || true
-    return 1
-  fi
-}
-
-"$HQL" run --to jsonlines manifest.hql > work/manifest.jsonl
+# The manifest and its signature are files the later steps read.
+save "manifest.hql, written" work/manifest.jsonl \
+  "$HQL" run --to jsonlines manifest.hql
 check manifest.hql expected/manifest.jsonl cat work/manifest.jsonl
 
-"$HQL" run --to json --compact sign.hql > work/manifest.sig.json
+save "sign.hql, written" work/manifest.sig.json \
+  "$HQL" run --to json --compact sign.hql
 check sign.hql expected/manifest.sig.json cat work/manifest.sig.json
 
 check "verify.hql, the release" expected/verify-release.json \

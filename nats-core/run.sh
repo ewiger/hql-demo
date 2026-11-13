@@ -8,21 +8,17 @@ source ../bin/hql-bin.sh
 
 export NATS_URL=nats://localhost:54223
 out="$(mktemp)"
-trap 'rm -f "$out"; docker compose down -v >/dev/null 2>&1' EXIT
-docker compose up -d --wait nats >/dev/null 2>&1
+trap 'rm -f "$out" "$out.err"; docker compose down -v >/dev/null 2>&1' EXIT
+up nats
 
 # A core subject keeps nothing: the subscriber must be listening before
 # anything is published.
-"$HQL" run --to json --compact subscribe.hql >"$out" &
+"$HQL" run --to json --compact subscribe.hql >"$out" 2>"$out.err" &
 subscriber=$!
 sleep 1
-"$HQL" run --to none publish.hql
-echo "ok   publish.hql"
-wait "$subscriber"
-if [ "$(cat "$out")" = "$(cat expected/subscribe.json)" ]; then
-  echo "ok   subscribe.hql"
-else
-  echo "FAIL subscribe.hql" >&2
-  diff "$out" expected/subscribe.json >&2 || true
+run publish.hql
+if ! wait "$subscriber"; then
+  fail subscribe.hql "$HQL run --to json --compact subscribe.hql" "$(cat "$out.err")"
   exit 1
 fi
+check subscribe.hql expected/subscribe.json cat "$out"

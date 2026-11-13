@@ -7,9 +7,8 @@ source ../bin/hql-bin.sh
 
 export KAFKA_BROKERS=localhost:59092
 trap 'docker compose down -v >/dev/null 2>&1' EXIT
-docker compose up -d --wait kafka >/dev/null 2>&1
-docker compose run --rm topics >/dev/null 2>&1
+up kafka
+once topics
 
-"$HQL" run --to none produce.hql
-echo "ok   produce.hql"
+run produce.hql
 expect consume.hql expected/consume.json

@@ -9,10 +9,9 @@ source ../bin/hql-bin.sh
 
 export LAKEHOUSE_URL=http://localhost:50001/cliservice
 trap 'docker compose down -v >/dev/null 2>&1' EXIT
-docker compose up -d --wait minio >/dev/null 2>&1
-docker compose run --rm buckets >/dev/null 2>&1
-docker compose up -d --wait spark >/dev/null 2>&1
+up minio
+once buckets
+up spark
 
-"$HQL" run --to none load.hql
-echo "ok   load.hql"
+run load.hql
 expect report.hql expected/report.json

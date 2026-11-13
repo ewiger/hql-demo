@@ -11,15 +11,12 @@ source ../bin/hql-bin.sh
 export NATS_URL=nats://localhost:54222
 export LAKEHOUSE_URL=http://localhost:50001/cliservice
 trap 'docker compose down -v >/dev/null 2>&1' EXIT
-docker compose up -d --wait nats minio >/dev/null 2>&1
-docker compose run --rm streams >/dev/null 2>&1
-docker compose run --rm buckets >/dev/null 2>&1
-docker compose up -d --wait spark >/dev/null 2>&1
+up nats minio
+once streams
+once buckets
+up spark
 
-for program in produce-raw.hql ingest.hql revenue.hql; do
-  "$HQL" run --to none "$program"
-  echo "ok   $program"
-done
+run produce-raw.hql ingest.hql revenue.hql
 expect silver.hql expected/silver.json
 expect gold.hql expected/gold.json
 expect rejected.hql expected/rejected.json

@@ -11,18 +11,12 @@ source ../bin/hql-bin.sh
 export DEMO_DSN="host=localhost port=55432 user=hql password=hql dbname=demo"
 export KAFKA_BROKERS=localhost:59092
 trap 'docker compose down -v >/dev/null 2>&1' EXIT
-docker compose up -d --wait postgres kafka >/dev/null 2>&1
-docker compose run --rm topics >/dev/null 2>&1
+up postgres kafka
+once topics
 
-for program in seed.hql postgres-to-kafka.hql kafka-to-postgres.hql; do
-  "$HQL" run --to none "$program"
-  echo "ok   $program"
-done
+run seed.hql postgres-to-kafka.hql kafka-to-postgres.hql
 expect archive.hql expected/archive.json
 
-for program in produce-raw.hql quarantine.hql; do
-  "$HQL" run --to none "$program"
-  echo "ok   $program"
-done
+run produce-raw.hql quarantine.hql
 expect clean.hql expected/clean.json
 expect rejected.hql expected/rejected.json
