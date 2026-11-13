@@ -30,7 +30,14 @@ another one.
 ```
 
 Each case starts its containers, runs its programs, and removes the
-containers and their volumes when it ends. The host ports are 59092 for
+containers and their volumes when it ends. A step that fails prints the
+case, the step, the command, hql's error output and a diff of the actual
+output against the expected file.
+
+CI ([`.github/workflows/ci.yml`](.github/workflows/ci.yml)) builds hql from
+its `main`, or from any ref given to a manual run, and runs `postgres`,
+`ledger` and `crypto`. The full `./run-all.sh` is a gate run by hand before
+an hql release. The host ports are 59092 for
 Kafka, 55432 for PostgreSQL, 54222 for NATS with JetStream, 54223 for core
 NATS and 50001 for the Spark SQL endpoint.
 
@@ -276,11 +283,19 @@ fail together. The block reads the sender's balance through the scope's
 own connection, so the row inserted after the updates sees them. A balance
 below the amount rolls the attempt back by the program's own rule,
 `tx.rollback("insufficient balance") given sender.balance < amount`, and
-the scope's value says so as data, which the program matches on. Under
-`isolation = Serializable` a concurrent transfer that conflicts is retried,
-up to the three attempts the scope names. [`ledger/report.hql`](ledger/report.hql)
-reads the balances and the transfers back; a `NUMERIC` column keeps its
-digits.
+the scope's value says so as data, which the program matches on. Each
+`update` is bound so its row count is read, and a debit or a credit that
+matches no account rolls the transfer back rather than commit half of it.
+A transfer's id is one more than the transfers made so far, counted in the
+same attempt. Under `isolation = Serializable` a concurrent transfer that
+conflicts is retried, up to the three attempts the scope names.
+[`ledger/report.hql`](ledger/report.hql) reads the balances and the
+transfers back; a `NUMERIC` column keeps its digits.
+
+The case then races: [`ledger/seed-race.hql`](ledger/seed-race.hql) gives
+the sender 150, and `run.sh` starts two transfers of 100 at once. Exactly
+one commits; the other retries, reads the new balance and rolls back (or
+ends `conflict` if its attempts run out), and no balance goes negative.
 
 ## A signed release
 
