@@ -1,0 +1,5 @@
+{"received": "2026-11-01T09:15:02Z", "body": {"customer": "c-17", "sku": "tea", "amount": 42.00}}
+{"received": "2026-11-01T09:15:09Z", "body": {"amount": 42, "sku": "tea", "customer": "c-17"}}
+{"received": "2026-11-01T09:16:40Z", "body": {"customer": "c-21", "sku": "jam", "amount": 6.50}}
+{"received": "2026-11-01T09:17:05Z", "body": {"sku": "jam", "customer": "c-21", "amount": 6.5}}
+{"received": "2026-11-01T09:18:30Z", "body": {"customer": "c-17", "sku": "jam", "amount": 6.50}}
