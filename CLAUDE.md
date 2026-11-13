@@ -9,9 +9,10 @@ hql-demo has no releases, no versions and no tags. It is a set of examples
 that run against hql's latest `main`, not documentation versioned with hql.
 Decided 2026-11-13.
 
-- Do not tag hql-demo, cut a release, keep a changelog, or name an hql
-  version a case needs. A case that needs a newer hql is updated when hql
-  `main` changes, not pinned to a version.
+- Do not tag hql-demo, cut a release or keep a changelog. The one
+  requirement is a line in the README's "Running" section naming the hql
+  version the cases work with; update it when the cases are moved to a
+  newer hql. Name no version or branch per case.
 - Keep changes small and only as needed: fix a case when hql `main` breaks
   it, add one when a feature deserves a real-system example. Do not
   restructure the cases to follow an hql release.

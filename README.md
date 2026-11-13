@@ -20,6 +20,8 @@ the output with `expected/`.
 
 ## Running
 
+The cases work with **hql 0.6.0**.
+
 You need Docker with Compose, and an `hql` binary built from the sibling
 `hql` repository (`cargo build` there) or on the `PATH`; set `HQL` to use
 another one.
