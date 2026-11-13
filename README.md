@@ -16,6 +16,7 @@ the output with `expected/`.
 | [`lakehouse/`](lakehouse/) | Spark 3.5, Delta Lake 3.3, MinIO | Write the mock events to a Delta table, then read it back as a report per customer |
 | [`nats-lakehouse/`](nats-lakehouse/) | all of the above | Raw messages on a subject routed into a silver Delta table or a dead-letter subject, then the silver table totalled into a gold Delta table |
 | [`ledger/`](ledger/) | PostgreSQL 17 | Two accounts and a transfers table; a transfer of 100 as one transaction, twice committed and once rolled back on the sender's balance, then the ledger read back |
+| [`crypto/`](crypto/) | none | A release folder listed into a manifest of SHA-256 digests, the manifest signed with an Ed25519 key, the folder, an altered copy and a forged manifest verified against it, and webhook deliveries kept one per body by fingerprint |
 
 ## Running
 
@@ -280,6 +281,49 @@ the scope's value says so as data, which the program matches on. Under
 up to the three attempts the scope names. [`ledger/report.hql`](ledger/report.hql)
 reads the balances and the transfers back; a `NUMERIC` column keeps its
 digits.
+
+## A signed release
+
+The `crypto/` case needs no service, and an `hql` built from the
+`feat/gen-purpose-leap` branch or later, which has `io.fs`, `io.env`,
+`crypto.digest`, `encoding` and the `crypto` module's signatures.
+
+`manifest.hql` walks a release folder with `io.fs` and writes one JSON line
+per file: its path within the folder, its size and the SHA-256 of its text.
+The folder is `release/`, or the one `--arg dir=…` names:
+
+```hql
+root = env.arg("dir") | unwrap_or("release")
+
+fs.folder(root).walk()
+| filter(e => e.kind == "file")
+| map(e => Item(
+    path = e.path.text[size(root) + 1:],
+    size = e.size | unwrap_or(0),
+    sha256 = source(file(e.path), Text) | map(t => t.digest(Sha256)) | first | unwrap_or("")))
+```
+
+`sign.hql` signs the manifest's text with an Ed25519 private key, a detached
+signature written in base64 beside the thumbprint of the key that verifies
+it. The key in `keys/` is the published test key 1 of RFC 8032, never a key
+to trust; `run.sh` sets its mode to `0600`, as `hql` requires of a private
+key file.
+
+`verify.hql` checks the signature with the public key first, then each file
+of the manifest against the folder: `unchanged`, `changed` or `missing`.
+`run.sh` verifies the release itself, then a copy with one file altered and
+one removed, where the signature holds and the two files are reported, then
+a manifest changed after it was signed, where the signature fails:
+
+```json
+{"files":[{"path":"VERSION","status":"unchanged"},{"path":"docs/NOTES.md","status":"unchanged"},{"path":"settings.toml","status":"missing"},{"path":"totals.csv","status":"changed"}],"signature":"valid"}
+```
+
+`fingerprints.hql` reads webhook deliveries that carry no id. A body sent
+twice arrives with its keys in another order or with `42.00` for `42`, and
+the fingerprint of a `Data` tree, the SHA-256 of its canonical JSON, is the
+same for both: grouped by it, the first delivery of each body is kept, with
+its number of copies and its fingerprint in hex and in base64.
 
 ## Running a program by hand
 
