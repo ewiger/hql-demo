@@ -36,15 +36,15 @@ output against the expected file.
 
 CI ([`.github/workflows/ci.yml`](.github/workflows/ci.yml)) builds hql from
 its `main`, or from any ref given to a manual run, and runs `postgres`,
-`ledger` and `crypto`. The full `./run-all.sh` is a gate run by hand before
-an hql release. The host ports are 59092 for
+`ledger` and `crypto`. hql runs the full `./run-all.sh` by hand before its
+own releases, as a check against real services. The host ports are 59092 for
 Kafka, 55432 for PostgreSQL, 54222 for NATS with JetStream, 54223 for core
 NATS and 50001 for the Spark SQL endpoint.
 
-The NATS and lakehouse cases need an `hql` built from the
-`feat/nats-lakehouse` branch or later, which has the `nats`,
-`nats_jetstream` and `spark` kinds. The first lakehouse run builds an image of Spark with Delta Lake and
-the S3 connector; the build downloads about 300 MB of jars, once.
+The cases follow hql's latest `main`; hql-demo has no releases or
+versions of its own. The first lakehouse run builds an image of Spark with
+Delta Lake and the S3 connector; the build downloads about 300 MB of jars,
+once.
 
 ## Source and tap
 
@@ -299,8 +299,7 @@ ends `conflict` if its attempts run out), and no balance goes negative.
 
 ## A signed release
 
-The `crypto/` case needs no service, and an `hql` built from the
-`feat/gen-purpose-leap` branch or later, which has `io.fs`, `io.env`,
+The `crypto/` case needs no service. It uses `io.fs`, `io.env`,
 `crypto.digest`, `encoding` and the `crypto` module's signatures.
 
 `manifest.hql` walks a release folder with `io.fs` and writes one JSON line
