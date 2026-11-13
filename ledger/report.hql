@@ -9,5 +9,5 @@ transfers : Seq<Transfer> = source("transfers")
 
 {
     balances: accounts | map(a => {owner: a.owner, balance: a.balance}) | List,
-    transfers: transfers | map(t => {from_id: t.from_id, to_id: t.to_id, amount: t.amount}) | List,
+    transfers: transfers | map(t => {id: t.id, from_id: t.from_id, to_id: t.to_id, amount: t.amount}) | List,
 }
