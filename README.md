@@ -15,6 +15,7 @@ the output with `expected/`.
 | [`nats-core/`](nats-core/) | NATS 2.11 without JetStream | A subscriber on a wildcard subject, started first, given the mock events a publisher sends to a subject per kind of event |
 | [`lakehouse/`](lakehouse/) | Spark 3.5, Delta Lake 3.3, MinIO | Write the mock events to a Delta table, then read it back as a report per customer |
 | [`nats-lakehouse/`](nats-lakehouse/) | all of the above | Raw messages on a subject routed into a silver Delta table or a dead-letter subject, then the silver table totalled into a gold Delta table |
+| [`ledger/`](ledger/) | PostgreSQL 17 | Two accounts and a transfers table; a transfer of 100 as one transaction, twice committed and once rolled back on the sender's balance, then the ledger read back |
 
 ## Running
 
@@ -262,6 +263,23 @@ tap("orders_raw")
 
 A `sink` into a Delta table writes its rows in statements of up to 500, each
 one commit to the table's log, and one more when the stream ends.
+
+## A transfer as one transaction
+
+[`ledger/transfer.hql`](ledger/transfer.hql) moves 100 from one account to
+another as one transaction over two PostgreSQL tables
+([HQL-0051](https://github.com/ewiger/hql/blob/main/doc/proposals/HQL-0051/README.md)):
+the two accounts and the transfers table are the participants of one
+`with transaction` scope, so its two `update`s and its `insert` hold or
+fail together. The block reads the sender's balance through the scope's
+own connection, so the row inserted after the updates sees them. A balance
+below the amount rolls the attempt back by the program's own rule,
+`tx.rollback("insufficient balance") given sender.balance < amount`, and
+the scope's value says so as data, which the program matches on. Under
+`isolation = Serializable` a concurrent transfer that conflicts is retried,
+up to the three attempts the scope names. [`ledger/report.hql`](ledger/report.hql)
+reads the balances and the transfers back; a `NUMERIC` column keeps its
+digits.
 
 ## Running a program by hand
 

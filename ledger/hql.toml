@@ -1,0 +1,18 @@
+# The run context of the ledger use case: two tables of one PostgreSQL
+# database, which is what lets a transfer touch both in one transaction
+# (HQL-0051). The connection string holds a password, so `dsn_env` names
+# the environment variable that holds it.
+
+[endpoint.accounts]
+kind = "postgres"
+dsn_env = "DEMO_DSN"
+table = "accounts"
+order = ["id"]
+element = "Account"
+
+[endpoint.transfers]
+kind = "postgres"
+dsn_env = "DEMO_DSN"
+table = "transfers"
+order = ["id"]
+element = "Transfer"
