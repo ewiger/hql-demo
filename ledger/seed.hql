@@ -1,7 +1,7 @@
 // The ledger as the day starts: two accounts, and no transfer yet.
 //
 // `target` creates each table where none exists, a column per field, and
-// replaces its rows. A transfer's `id` is the sender's balance after it,
+// replaces its rows. A transfer's `id` counts the transfers made, 1, 2, …,
 // so the day's transfers read in the order they were made.
 
 type Account { id : Int, owner : String, balance : Decimal }

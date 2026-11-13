@@ -1,1 +1,1 @@
-{"balances":[{"balance":50.00,"owner":"ada"},{"balance":240.00,"owner":"grace"}],"transfers":[{"amount":100.00,"from_id":1,"to_id":2},{"amount":100.00,"from_id":1,"to_id":2}]}
+{"balances":[{"balance":50.00,"owner":"ada"},{"balance":240.00,"owner":"grace"}],"transfers":[{"amount":100.00,"from_id":1,"id":1,"to_id":2},{"amount":100.00,"from_id":1,"id":2,"to_id":2}]}

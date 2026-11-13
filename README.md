@@ -20,6 +20,8 @@ the output with `expected/`.
 
 ## Running
 
+The cases work with **hql 0.6.0**.
+
 You need Docker with Compose, and an `hql` binary built from the sibling
 `hql` repository (`cargo build` there) or on the `PATH`; set `HQL` to use
 another one.
@@ -30,14 +32,21 @@ another one.
 ```
 
 Each case starts its containers, runs its programs, and removes the
-containers and their volumes when it ends. The host ports are 59092 for
+containers and their volumes when it ends. A step that fails prints the
+case, the step, the command, hql's error output and a diff of the actual
+output against the expected file.
+
+CI ([`.github/workflows/ci.yml`](.github/workflows/ci.yml)) builds hql from
+its `main`, or from any ref given to a manual run, and runs `postgres`,
+`ledger` and `crypto`. hql runs the full `./run-all.sh` by hand before its
+own releases, as a check against real services. The host ports are 59092 for
 Kafka, 55432 for PostgreSQL, 54222 for NATS with JetStream, 54223 for core
 NATS and 50001 for the Spark SQL endpoint.
 
-The NATS and lakehouse cases need an `hql` built from the
-`feat/nats-lakehouse` branch or later, which has the `nats`,
-`nats_jetstream` and `spark` kinds. The first lakehouse run builds an image of Spark with Delta Lake and
-the S3 connector; the build downloads about 300 MB of jars, once.
+The cases follow hql's latest `main`; hql-demo has no releases or
+versions of its own. The first lakehouse run builds an image of Spark with
+Delta Lake and the S3 connector; the build downloads about 300 MB of jars,
+once.
 
 ## Source and tap
 
@@ -276,16 +285,23 @@ fail together. The block reads the sender's balance through the scope's
 own connection, so the row inserted after the updates sees them. A balance
 below the amount rolls the attempt back by the program's own rule,
 `tx.rollback("insufficient balance") given sender.balance < amount`, and
-the scope's value says so as data, which the program matches on. Under
-`isolation = Serializable` a concurrent transfer that conflicts is retried,
-up to the three attempts the scope names. [`ledger/report.hql`](ledger/report.hql)
-reads the balances and the transfers back; a `NUMERIC` column keeps its
-digits.
+the scope's value says so as data, which the program matches on. Each
+`update` is bound so its row count is read, and a debit or a credit that
+matches no account rolls the transfer back rather than commit half of it.
+A transfer's id is one more than the transfers made so far, counted in the
+same attempt. Under `isolation = Serializable` a concurrent transfer that
+conflicts is retried, up to the three attempts the scope names.
+[`ledger/report.hql`](ledger/report.hql) reads the balances and the
+transfers back; a `NUMERIC` column keeps its digits.
+
+The case then races: [`ledger/seed-race.hql`](ledger/seed-race.hql) gives
+the sender 150, and `run.sh` starts two transfers of 100 at once. Exactly
+one commits; the other retries, reads the new balance and rolls back (or
+ends `conflict` if its attempts run out), and no balance goes negative.
 
 ## A signed release
 
-The `crypto/` case needs no service, and an `hql` built from the
-`feat/gen-purpose-leap` branch or later, which has `io.fs`, `io.env`,
+The `crypto/` case needs no service. It uses `io.fs`, `io.env`,
 `crypto.digest`, `encoding` and the `crypto` module's signatures.
 
 `manifest.hql` walks a release folder with `io.fs` and writes one JSON line
