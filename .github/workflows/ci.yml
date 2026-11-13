@@ -1,0 +1,61 @@
+name: CI
+
+# Build hql from a given ref and run a representative subset of the use
+# cases against it, each with its own containers: `postgres` (an endpoint
+# and a round trip), `ledger` (a transaction, and two of them racing) and
+# `crypto` (no service). The full `run-all.sh` stays a pre-release gate run
+# by hand; it needs Kafka, NATS and Spark, which are slow to start here.
+
+on:
+  push:
+    branches: [main]
+  pull_request:
+  workflow_dispatch:
+    inputs:
+      hql_ref:
+        description: The hql branch, tag or commit to build
+        default: main
+      cases:
+        description: Cases to run, separated by spaces, or "all"
+        default: postgres ledger crypto
+
+env:
+  CARGO_TERM_COLOR: always
+  HQL_REF: ${{ inputs.hql_ref || 'main' }}
+  CASES: ${{ inputs.cases || 'postgres ledger crypto' }}
+
+jobs:
+  cases:
+    name: Cases against hql ${{ inputs.hql_ref || 'main' }}
+    runs-on: ubuntu-latest
+    steps:
+      # The two repositories side by side, as bin/hql-bin.sh expects:
+      # hql-demo/ finds its binary at ../hql/target/debug/hql.
+      - uses: actions/checkout@v4
+        with:
+          path: hql-demo
+      - uses: actions/checkout@v4
+        with:
+          repository: ewiger/hql
+          ref: ${{ env.HQL_REF }}
+          path: hql
+      - name: Install hql's pinned toolchain
+        working-directory: hql
+        run: rustup show active-toolchain || rustup toolchain install
+      - uses: Swatinem/rust-cache@v2
+        with:
+          workspaces: hql
+      - name: Build hql
+        working-directory: hql
+        run: cargo build --locked
+      - name: Run the cases
+        working-directory: hql-demo
+        run: |
+          if [ "$CASES" = all ]; then
+            ./run-all.sh
+            exit
+          fi
+          for case in $CASES; do
+            echo "== $case"
+            "./$case/run.sh"
+          done
