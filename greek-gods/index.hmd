@@ -8,7 +8,7 @@ cell that `hql render` runs.
 The knowledge base is HQL modules under `lib/myth/` with their records
 beside them. The Greek script is handled by the `greek` package, whose
 functions are declared in HQL without a body and implemented in Rust, in
-`greek/`. The documents:
+`packages/greek/`. The documents:
 
 - [[theogony]]: from Chaos to the rule of Zeus, in Hesiod's order, and where
   the sources disagree

@@ -14,7 +14,7 @@ The case exercises:
   receiver modules over their own types, a trait with bodyless functions
   implemented by three receiver modules, private helpers, and a module
   that reads the records kept beside it.
-- **A local crate as an extension**: `greek/` declares the module `greek`
+- **A local crate as an extension**: `packages/greek/` declares the module `greek`
   with four functions and no bodies, implements them in Rust, and is
   loaded by listing it under `[packages] paths`. hql builds it on the
   first run, so a program, a module and a document all call it.

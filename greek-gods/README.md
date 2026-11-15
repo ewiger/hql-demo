@@ -93,7 +93,7 @@ greek-gods/
 │   ├── evidence.hql        tablets, sites and texts as one list of Witness
 │   ├── wikipedia.hql       reads the external namespace from its card
 │   └── records/*.jsonl     the data
-├── greek/                  the Rust module: the crate of the package `greek`
+├── packages/greek/         the Rust module: the crate of the package `greek`
 │   ├── Cargo.toml
 │   ├── modules/greek/mod.hql   the contract: declarations without bodies
 │   └── src/lib.rs              their implementations
@@ -111,7 +111,7 @@ HQL modules whose functions are declared without a body, and the Rust that
 implements them. Book chapters 32 to 36 in the hql repository describe the
 mechanism. `greek` is a working minimal example.
 
-**The contract** is `greek/modules/greek/mod.hql`. A program reads it like
+**The contract** is `packages/greek/modules/greek/mod.hql`. A program reads it like
 any other module, and the checker types calls from it alone:
 
 ```hql
@@ -125,7 +125,7 @@ fn numeral(self: Int) : String
 fn linear_b(self: String) : String
 ```
 
-**The implementation** is `greek/src/lib.rs`. Each function is plain Rust
+**The implementation** is `packages/greek/src/lib.rs`. Each function is plain Rust
 over `&str` or `i64`, unit-tested on its own, with a thin adapter that
 takes and gives `hql::ext::Value`. One table registers the adapters under
 the declared names, and `hql::extension!` exports it:
@@ -155,7 +155,7 @@ modules = "modules"
 
 ```toml
 [packages]
-paths = ["greek"]
+paths = ["packages/greek"]
 ```
 
 The first run in the project builds the crate with cargo, about a minute,
@@ -231,7 +231,7 @@ hql eval 'import greek
   every myth cites a work by its id and a passage. Re-render the documents
   one per command, `for d in *.hmd; do hql render --emit after --in-place
   "$d"; done`, and write `expected/` again from the programs.
-- **A function in Rust.** Declare it in `greek/modules/greek/mod.hql`,
+- **A function in Rust.** Declare it in `packages/greek/modules/greek/mod.hql`,
   implement it in `src/lib.rs` and add it to the `GREEK` table. The next
   run rebuilds the crate.
 - **A kind of evidence.** Write a receiver module `for YourType : Evidence`

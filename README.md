@@ -357,10 +357,10 @@ three things at once, each the way HQL means it to be used:
 
 ```text
 greek-gods/
-├── .hql/config.toml     the project: [modules] roots = ["lib"], [packages] paths = ["greek"]
+├── .hql/config.toml     the project: [modules] roots = ["lib"], [packages] paths = ["packages/greek"]
 ├── .hmd/config.toml     the vault: its cards are the documents beside it
 ├── lib/myth/            the knowledge base, HQL modules with their records in records/
-├── greek/               the crate of the package `greek`: a contract without bodies, and Rust
+├── packages/greek/      the crate of the package `greek`: a contract without bodies, and Rust
 ├── *.hmd                the documents, whose cells query lib/myth/ and call `greek`
 └── queries/             programs over the same modules
 ```
@@ -376,10 +376,10 @@ with no body, and three modules implement it, `module myth.tablets for
 Tablet : Evidence` and the same for sites and the passages of texts;
 `Witness`, the trait's named type, holds all three in one list.
 
-**The extension.** [`greek/`](greek-gods/greek/) is the crate
+**The extension.** [`packages/greek/`](greek-gods/packages/greek/) is the crate
 `hql-ext-greek`. Its contract,
-[`modules/greek/mod.hql`](greek-gods/greek/modules/greek/mod.hql), declares
-four functions without a body, and [`src/lib.rs`](greek-gods/greek/src/lib.rs)
+[`modules/greek/mod.hql`](greek-gods/packages/greek/modules/greek/mod.hql), declares
+four functions without a body, and [`src/lib.rs`](greek-gods/packages/greek/src/lib.rs)
 implements them:
 
 | Function | Gives |
@@ -389,7 +389,7 @@ implements them:
 | `12.numeral()` | `ιβʹ` |
 | `"di-wo-nu-so".linear_b()` | `𐀇𐀺𐀝𐀰` |
 
-`[packages] paths = ["greek"]` lists the crate, and the first run builds it
+`[packages] paths = ["packages/greek"]` lists the crate, and the first run builds it
 with cargo against the running hql, about a minute; a change to its sources
 rebuilds it on the next run. The library imports `greek` as it would any
 module: `fn latin(self) : String = self.greek.transliterate()` in

@@ -2,7 +2,7 @@
 # The Greek Gods use case, with no service: a knowledge base of Greek myth
 # from Chaos to Heracles, kept as HQL modules with their records under
 # lib/myth/, the Greek script handled by the `greek` package, whose module
-# declares functions without bodies and whose Rust crate, greek/,
+# declares functions without bodies and whose Rust crate, packages/greek/,
 # implements them. hql builds the crate on the first run, against itself.
 #
 # The programs under queries/ are checked as JSON Lines. The documents are
@@ -28,7 +28,7 @@ done
 # source beside this repository, as hql builds the package itself.
 hql_source="$(cd ../.. && pwd)/hql"
 if [ -f "$hql_source/Cargo.toml" ]; then
-  save "greek/: cargo test" /dev/null \
-    cargo test --quiet --manifest-path greek/Cargo.toml \
+  save "packages/greek/: cargo test" /dev/null \
+    cargo test --quiet --manifest-path packages/greek/Cargo.toml \
     --config "patch.crates-io.hql.path=\"$hql_source\""
 fi
