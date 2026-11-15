@@ -6,7 +6,7 @@
 // NATS confirms nothing: a message reaches whoever is subscribed when it
 // is published.
 
-import io.msg.nats
+from io.msg.nats import nats
 
 type Event {
     id       : Int

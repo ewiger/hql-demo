@@ -3,6 +3,7 @@
 // JSON, is the key the rows lack. The first delivery of each body is kept,
 // with its fingerprint in hex and in base64.
 import crypto.digest
+from crypto.digest import fingerprint
 import encoding
 
 type Delivery { received : String, body : Data }
