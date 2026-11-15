@@ -407,6 +407,7 @@ each of their `hql` cells keeps its output below it, written by `hql render
 | [`olympians.hmd`](greek-gods/olympians.hmd) | the gods' names in Greek, in Latin letters and unmarked, their parents and domains, the children of Zeus, their myths |
 | [`heracles.hmd`](greek-gods/heracles.hmd) | his ancestors back to Gaia, his life, and the twelve labours numbered `αʹ` to `ιβʹ` |
 | [`evidence.hmd`](greek-gods/evidence.hmd) | the Linear B attestations in the syllabary, the sanctuaries, and each god's earliest witness |
+| [`wikipedia.hmd`](greek-gods/wikipedia.hmd) | an external namespace: each being's Wikipedia article and Wikidata item, as an authored table the other documents read, and a check that it covers the ontology |
 
 `run.sh` runs the six programs under `queries/`, renders each document
 again and requires the result to be the document as committed, and runs

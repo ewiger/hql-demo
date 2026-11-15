@@ -19,7 +19,7 @@ for program in theogony pantheon lineage variants labours evidence; do
     "$HQL" run --to jsonlines "queries/$program.hql"
 done
 
-for document in index theogony olympians heracles evidence; do
+for document in index theogony olympians heracles evidence wikipedia; do
   check "$document.hmd" "$document.hmd" \
     "$HQL" render --emit after "$document.hmd"
 done

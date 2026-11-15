@@ -57,6 +57,29 @@ The records are in `lib/myth/records/` and were checked against the
 ancient texts and the Linear B corpus. They are a sample, not a complete
 mythology.
 
+### External namespaces
+
+The ontology names each being by an id of its own, `kronos`. Two external
+namespaces name the same beings differently: Wikipedia by article title,
+`Cronus`, and Wikidata by item, `Q44204`. The mapping is not a record file.
+It is a Markdown table in the vault's card [wikipedia.hmd](wikipedia.hmd),
+one row per being with both as links, which people read and edit there.
+`myth.wikipedia` parses the table out of the card's text. A module does not
+see the vault, so a cell passes the text in through a reference to the
+card:
+
+```hql
+import myth.wikipedia
+
+articles = wikipedia.articles(@[[wikipedia]].body.unwrap_or(""))
+```
+
+The card checks itself every time it is rendered: each being has a row
+and each row names a being. The titles were resolved through Wikipedia's
+API, following redirects, and each description was read to keep out pages
+that list several figures of one name. Two beings, Menoetius and Alcaeus,
+have only such a page, and their rows say so.
+
 ## Layout
 
 ```text
@@ -68,12 +91,14 @@ greek-gods/
 │   ├── beings.hql …        a receiver module per record type
 │   ├── kb.hql              reads records/, beside it
 │   ├── evidence.hql        tablets, sites and texts as one list of Witness
+│   ├── wikipedia.hql       reads the external namespace from its card
 │   └── records/*.jsonl     the data
 ├── greek/                  the Rust module: the crate of the package `greek`
 │   ├── Cargo.toml
 │   ├── modules/greek/mod.hql   the contract: declarations without bodies
 │   └── src/lib.rs              their implementations
 ├── *.hmd                   the documents, with their HQL cells and outputs
+├── wikipedia.hmd           among them, the mapping to Wikipedia and Wikidata
 ├── queries/*.hql           programs over the same modules
 ├── expected/*.jsonl        what the programs print
 └── run.sh                  the case, end to end
@@ -176,7 +201,8 @@ hql render --emit after --in-place heracles.hmd
 Start with [index.hmd](index.hmd). Its last cell queries the vault itself,
 listing each card and the links between them. The others are
 [theogony.hmd](theogony.hmd), [olympians.hmd](olympians.hmd),
-[heracles.hmd](heracles.hmd) and [evidence.hmd](evidence.hmd).
+[heracles.hmd](heracles.hmd), [evidence.hmd](evidence.hmd) and
+[wikipedia.hmd](wikipedia.hmd).
 
 ## Running
 

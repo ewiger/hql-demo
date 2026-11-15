@@ -15,34 +15,46 @@ kb.beings() | filter(b => b.olympian() or b.id == "hestia" or b.id == "hades")
 
 ## Names
 
-Each Greek name as written, in Latin letters and without its marks. The
-last two columns come from the `greek` package, whose functions are
-declared in HQL with no body and implemented in Rust.
+Each Greek name as written, in Latin letters and without its marks, the
+Roman name, and the god's article in [[wikipedia]]. The Latin letters and
+the unmarked Greek come from the `greek` package, whose functions are
+declared in HQL with no body and implemented in Rust. The articles come
+from the table in the Wikipedia card, read through `@[[wikipedia]]`.
 
 ```hql
 import myth.beings
+import myth.wikipedia
+
+articles = wikipedia.articles(@[[wikipedia]].body.unwrap_or(""))
 
 gods
-| map(b => {god: b.name, greek: b.greek, latin: b.latin(), unmarked: b.plain(), roman: b.roman.unwrap_or("")})
-| Table(columns = ["god", "greek", "latin", "unmarked", "roman"])
+| map(b => {
+    god: b.name,
+    greek: b.greek,
+    latin: b.latin(),
+    unmarked: b.plain(),
+    roman: b.roman.unwrap_or(""),
+    wikipedia: wikipedia.article(articles, b.id) | map(a => a.link()) | unwrap_or(""),
+  })
+| Table(columns = ["god", "greek", "latin", "unmarked", "roman", "wikipedia"])
 ```
-<!-- hql:output hash=3c2668c7cf9f status=ok -->
-| god        | greek    | latin      | unmarked | roman   |
-| ---------- | -------- | ---------- | -------- | ------- |
-| Hestia     | Ἑστία    | Hestia     | Εστια    | Vesta   |
-| Demeter    | Δημήτηρ  | Dēmētēr    | Δημητηρ  | Ceres   |
-| Hera       | Ἥρα      | Hēra       | Ηρα      | Juno    |
-| Hades      | ᾍδης     | Haidēs     | Αδης     | Pluto   |
-| Poseidon   | Ποσειδῶν | Poseidōn   | Ποσειδων | Neptune |
-| Zeus       | Ζεύς     | Zeus       | Ζευς     | Jupiter |
-| Athena     | Ἀθηνᾶ    | Athēna     | Αθηνα    | Minerva |
-| Apollo     | Ἀπόλλων  | Apollōn    | Απολλων  | Apollo  |
-| Artemis    | Ἄρτεμις  | Artemis    | Αρτεμις  | Diana   |
-| Ares       | Ἄρης     | Arēs       | Αρης     | Mars    |
-| Aphrodite  | Ἀφροδίτη | Aphroditē  | Αφροδιτη | Venus   |
-| Hephaestus | Ἥφαιστος | Hēphaistos | Ηφαιστος | Vulcan  |
-| Hermes     | Ἑρμῆς    | Hermēs     | Ερμης    | Mercury |
-| Dionysus   | Διόνυσος | Dionysos   | Διονυσος | Bacchus |
+<!-- hql:output hash=18cdd0a1ddff status=ok -->
+| god        | greek    | latin      | unmarked | roman   | wikipedia                                              |
+| ---------- | -------- | ---------- | -------- | ------- | ------------------------------------------------------ |
+| Hestia     | Ἑστία    | Hestia     | Εστια    | Vesta   | [Hestia](https://en.wikipedia.org/wiki/Hestia)         |
+| Demeter    | Δημήτηρ  | Dēmētēr    | Δημητηρ  | Ceres   | [Demeter](https://en.wikipedia.org/wiki/Demeter)       |
+| Hera       | Ἥρα      | Hēra       | Ηρα      | Juno    | [Hera](https://en.wikipedia.org/wiki/Hera)             |
+| Hades      | ᾍδης     | Haidēs     | Αδης     | Pluto   | [Hades](https://en.wikipedia.org/wiki/Hades)           |
+| Poseidon   | Ποσειδῶν | Poseidōn   | Ποσειδων | Neptune | [Poseidon](https://en.wikipedia.org/wiki/Poseidon)     |
+| Zeus       | Ζεύς     | Zeus       | Ζευς     | Jupiter | [Zeus](https://en.wikipedia.org/wiki/Zeus)             |
+| Athena     | Ἀθηνᾶ    | Athēna     | Αθηνα    | Minerva | [Athena](https://en.wikipedia.org/wiki/Athena)         |
+| Apollo     | Ἀπόλλων  | Apollōn    | Απολλων  | Apollo  | [Apollo](https://en.wikipedia.org/wiki/Apollo)         |
+| Artemis    | Ἄρτεμις  | Artemis    | Αρτεμις  | Diana   | [Artemis](https://en.wikipedia.org/wiki/Artemis)       |
+| Ares       | Ἄρης     | Arēs       | Αρης     | Mars    | [Ares](https://en.wikipedia.org/wiki/Ares)             |
+| Aphrodite  | Ἀφροδίτη | Aphroditē  | Αφροδιτη | Venus   | [Aphrodite](https://en.wikipedia.org/wiki/Aphrodite)   |
+| Hephaestus | Ἥφαιστος | Hēphaistos | Ηφαιστος | Vulcan  | [Hephaestus](https://en.wikipedia.org/wiki/Hephaestus) |
+| Hermes     | Ἑρμῆς    | Hermēs     | Ερμης    | Mercury | [Hermes](https://en.wikipedia.org/wiki/Hermes)         |
+| Dionysus   | Διόνυσος | Dionysos   | Διονυσος | Bacchus | [Dionysus](https://en.wikipedia.org/wiki/Dionysus)     |
 <!-- /hql:output -->
 
 ## Family and domains

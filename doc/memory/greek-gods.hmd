@@ -46,6 +46,13 @@ where it belongs.
   Apollodorus does not have Heracles wear the Nemean lion's skin; in
   Euripides the madness follows the labours; PY Tn 316 gives Zeus a vessel
   and a man, and the metal is uncertain.
+- The Wikipedia and Wikidata mapping is a Markdown table in the card
+  `wikipedia.hmd`, not a record file, so that people edit it where they
+  read it. Cells read it with `@[[wikipedia]].body`, which is an
+  `Option<String>`. The titles and items were resolved through the
+  Wikipedia API on 2026-11-16, following redirects; set-index pages
+  ("name of several figures") are not flagged as disambiguation, so each
+  article's description was read as well.
 - An account of a birth is `partial` when the source names one parent
   without denying the other. Without that flag no rule over the parents
   alone is right: equal sets make Homer's "son of Perseus" contradict

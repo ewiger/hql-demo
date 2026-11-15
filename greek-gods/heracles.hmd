@@ -12,34 +12,45 @@ Every ancestor the first account of each birth names, nearest first, each
 once. Through Zeus the line reaches Kronos and Rhea, then Uranus and Gaia,
 who in Hesiod comes into being after Chaos and is born of no one. Through
 Alcmene it reaches her grandfather Perseus, whose father is Zeus again.
-The Greek names are put into Latin letters by the `greek` package.
+The Greek names are put into Latin letters by the `greek` package, and
+each ancestor links to its article in [[wikipedia]].
 
 ```hql
 import myth.kb
 import myth.beings
 import myth.genealogy as family
+import myth.wikipedia
+
+articles = wikipedia.articles(@[[wikipedia]].body.unwrap_or(""))
 
 family.lineage(kb.parentage(), "heracles")
-| map(a => kb.being(a.being) | map(b => {generation: a.generation, name: b.name, greek: b.greek, latin: b.latin(), kind: b.kind}))
+| map(a => kb.being(a.being) | map(b => {
+    generation: a.generation,
+    name: b.name,
+    greek: b.greek,
+    latin: b.latin(),
+    kind: b.kind,
+    wikipedia: wikipedia.article(articles, b.id) | map(w => w.link()) | unwrap_or(""),
+  }))
 | somes
-| Table(columns = ["generation", "name", "greek", "latin", "kind"])
+| Table(columns = ["generation", "name", "greek", "latin", "kind", "wikipedia"])
 ```
-<!-- hql:output hash=6060f2c8c531 status=ok -->
-| generation | name       | greek      | latin      | kind       |
-| ---------- | ---------- | ---------- | ---------- | ---------- |
-| 1          | Zeus       | Ζεύς       | Zeus       | olympian   |
-| 1          | Alcmene    | Ἀλκμήνη    | Alkmēnē    | mortal     |
-| 2          | Kronos     | Κρόνος     | Kronos     | titan      |
-| 2          | Rhea       | Ῥέα        | Rhea       | titan      |
-| 2          | Electryon  | Ἠλεκτρύων  | Ēlektryōn  | mortal     |
-| 3          | Uranus     | Οὐρανός    | Ouranos    | primordial |
-| 3          | Gaia       | Γαῖα       | Gaia       | primordial |
-| 3          | Perseus    | Περσεύς    | Perseus    | hero       |
-| 3          | Andromeda  | Ἀνδρομέδα  | Andromeda  | mortal     |
-| 4          | Danaë      | Δανάη      | Danaē      | mortal     |
-| 4          | Cepheus    | Κηφεύς     | Kēpheus    | mortal     |
-| 4          | Cassiopeia | Κασσιέπεια | Kassiepeia | mortal     |
-| 5          | Acrisius   | Ἀκρίσιος   | Akrisios   | mortal     |
+<!-- hql:output hash=d9c3c6feb48f status=ok -->
+| generation | name       | greek      | latin      | kind       | wikipedia                                                                                          |
+| ---------- | ---------- | ---------- | ---------- | ---------- | -------------------------------------------------------------------------------------------------- |
+| 1          | Zeus       | Ζεύς       | Zeus       | olympian   | [Zeus](https://en.wikipedia.org/wiki/Zeus)                                                         |
+| 1          | Alcmene    | Ἀλκμήνη    | Alkmēnē    | mortal     | [Alcmene](https://en.wikipedia.org/wiki/Alcmene)                                                   |
+| 2          | Kronos     | Κρόνος     | Kronos     | titan      | [Cronus](https://en.wikipedia.org/wiki/Cronus)                                                     |
+| 2          | Rhea       | Ῥέα        | Rhea       | titan      | [Rhea (mythology)](https://en.wikipedia.org/wiki/Rhea_(mythology))                                 |
+| 2          | Electryon  | Ἠλεκτρύων  | Ēlektryōn  | mortal     | [Electryon](https://en.wikipedia.org/wiki/Electryon)                                               |
+| 3          | Uranus     | Οὐρανός    | Ouranos    | primordial | [Uranus (mythology)](https://en.wikipedia.org/wiki/Uranus_(mythology))                             |
+| 3          | Gaia       | Γαῖα       | Gaia       | primordial | [Gaia](https://en.wikipedia.org/wiki/Gaia)                                                         |
+| 3          | Perseus    | Περσεύς    | Perseus    | hero       | [Perseus](https://en.wikipedia.org/wiki/Perseus)                                                   |
+| 3          | Andromeda  | Ἀνδρομέδα  | Andromeda  | mortal     | [Andromeda (mythology)](https://en.wikipedia.org/wiki/Andromeda_(mythology))                       |
+| 4          | Danaë      | Δανάη      | Danaē      | mortal     | [Danaë](https://en.wikipedia.org/wiki/Dana%C3%AB)                                                  |
+| 4          | Cepheus    | Κηφεύς     | Kēpheus    | mortal     | [Cepheus (father of Andromeda)](https://en.wikipedia.org/wiki/Cepheus_(father_of_Andromeda))       |
+| 4          | Cassiopeia | Κασσιέπεια | Kassiepeia | mortal     | [Cassiopeia (mother of Andromeda)](https://en.wikipedia.org/wiki/Cassiopeia_(mother_of_Andromeda)) |
+| 5          | Acrisius   | Ἀκρίσιος   | Akrisios   | mortal     | [Acrisius](https://en.wikipedia.org/wiki/Acrisius)                                                 |
 <!-- /hql:output -->
 
 ## His life

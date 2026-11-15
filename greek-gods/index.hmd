@@ -17,6 +17,8 @@ functions are declared in HQL without a body and implemented in Rust, in
 - [[heracles]]: the hero's descent from the first powers, his twelve
   labours and his death
 - [[evidence]]: the gods on Linear B tablets, at sanctuaries and in texts
+- [[wikipedia]]: the knowledge base's ids mapped to two external
+  namespaces, Wikipedia's articles and Wikidata's items
 
 ## What it holds
 
@@ -130,12 +132,13 @@ cards
 | Table(columns = ["card", "title", "links_to", "linked_from"])
 ```
 <!-- hql:output hash=8fb7c078ce65 status=ok -->
-| card      | title                                         | links_to                                | linked_from      |
-| --------- | --------------------------------------------- | --------------------------------------- | ---------------- |
-| README    | Greek Gods: an HQL demo over a small ontology |                                         |                  |
-| evidence  | The evidence                                  |                                         | heracles, index  |
-| heracles  | Heracles                                      | evidence                                | index            |
-| index     | Greek myth, as a knowledge base               | evidence, heracles, olympians, theogony |                  |
-| olympians | The Olympians                                 | theogony                                | index, theogony  |
-| theogony  | From Chaos to Zeus                            | olympians                               | index, olympians |
+| card      | title                                         | links_to                                           | linked_from                |
+| --------- | --------------------------------------------- | -------------------------------------------------- | -------------------------- |
+| README    | Greek Gods: an HQL demo over a small ontology |                                                    |                            |
+| evidence  | The evidence                                  |                                                    | heracles, index            |
+| heracles  | Heracles                                      | evidence, wikipedia                                | index, wikipedia           |
+| index     | Greek myth, as a knowledge base               | evidence, heracles, olympians, theogony, wikipedia |                            |
+| olympians | The Olympians                                 | theogony, wikipedia                                | index, theogony, wikipedia |
+| theogony  | From Chaos to Zeus                            | olympians                                          | index, olympians           |
+| wikipedia | Wikipedia                                     | heracles, olympians                                | heracles, index, olympians |
 <!-- /hql:output -->
