@@ -2,7 +2,7 @@
 
 Use cases for [HQL](https://github.com/ewiger/hql) against real systems, each
 in its own folder with the Docker Compose file that starts what it needs. A
-folder is an HQL vault: its `hql.toml` configures the endpoints its programs
+folder is an HQL project: its `.hql/config.toml` configures the endpoints its programs
 read and write by id, and its `run.sh` runs the case end to end and compares
 the output with `expected/`.
 
@@ -176,7 +176,7 @@ run that fails or stops early is given its last message again.
 The `nats_jetstream` kind is also the transport `NatsJetStream` of the
 module `io.msg.nats_jetstream`, whose constructor takes the kind's keys.
 [`nats/by-constructor.hql`](nats/by-constructor.hql) reads the subject with
-no endpoint in `hql.toml`:
+no endpoint in `.hql/config.toml`:
 
 ```hql
 import io.msg.nats_jetstream
@@ -192,7 +192,7 @@ A constructed transport has no schema boundary, so each message is read as
 
 The `spark` kind speaks HiveServer2's Thrift protocol over HTTP. A
 Databricks SQL warehouse answers it, and so does the Thrift Server of
-open-source Spark, so the same `hql.toml` and the same programs run against
+open-source Spark, so the same `.hql/config.toml` and the same programs run against
 either. What runs here is the open-source stack:
 
 ```text
@@ -220,7 +220,7 @@ server:
 
 1. In the workspace, open the SQL warehouse's connection details and copy
    its server hostname and HTTP path, and create a personal access token.
-2. In [`lakehouse/hql.toml`](lakehouse/hql.toml), uncomment
+2. In [`lakehouse/.hql/config.toml`](lakehouse/.hql/config.toml), uncomment
    `token_env = "LAKEHOUSE_TOKEN"`, and set `table` to a table of a catalog
    and schema you may write, `workspace.default.events`.
 3. Run the programs with both variables set:
@@ -343,7 +343,7 @@ its number of copies and its fingerprint in hex and in base64.
 
 ## Running a program by hand
 
-Start a case's services and set the variables its `hql.toml` names:
+Start a case's services and set the variables its `.hql/config.toml` names:
 
 ```sh
 cd kafka-postgres
