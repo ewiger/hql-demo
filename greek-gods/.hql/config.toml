@@ -1,0 +1,16 @@
+# The Greek Gods project. It needs no service: its programs and documents
+# read the knowledge base under records/, through two kinds of module.
+#
+# `[modules] roots` makes lib/ a module root: lib/myth/beings.hql is the
+# module `myth.beings`, written in HQL.
+#
+# `[packages] paths` lists the crate of the `greek` package, greek/. Its
+# module `greek` declares functions without bodies, and the crate's Rust
+# implements them; hql builds the crate on the first run, against itself,
+# and rebuilds it when its sources change.
+
+[modules]
+roots = ["lib"]
+
+[packages]
+paths = ["greek"]

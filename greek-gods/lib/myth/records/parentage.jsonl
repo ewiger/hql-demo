@@ -1,0 +1,98 @@
+{"child": "erebus", "parents": ["chaos"], "work": "theogony", "passage": "123"}
+{"child": "nyx", "parents": ["chaos"], "work": "theogony", "passage": "123"}
+{"child": "aether", "parents": ["erebus", "nyx"], "work": "theogony", "passage": "124–125"}
+{"child": "hemera", "parents": ["erebus", "nyx"], "work": "theogony", "passage": "124–125"}
+{"child": "uranus", "parents": ["gaia"], "work": "theogony", "passage": "126–128", "note": "without union"}
+{"child": "pontus", "parents": ["gaia"], "work": "theogony", "passage": "131–132", "note": "without union"}
+{"child": "oceanus", "parents": ["uranus", "gaia"], "work": "theogony", "passage": "132–138"}
+{"child": "coeus", "parents": ["uranus", "gaia"], "work": "theogony", "passage": "132–138"}
+{"child": "crius", "parents": ["uranus", "gaia"], "work": "theogony", "passage": "132–138"}
+{"child": "hyperion", "parents": ["uranus", "gaia"], "work": "theogony", "passage": "132–138"}
+{"child": "iapetus", "parents": ["uranus", "gaia"], "work": "theogony", "passage": "132–138"}
+{"child": "theia", "parents": ["uranus", "gaia"], "work": "theogony", "passage": "132–138"}
+{"child": "rhea", "parents": ["uranus", "gaia"], "work": "theogony", "passage": "132–138"}
+{"child": "themis", "parents": ["uranus", "gaia"], "work": "theogony", "passage": "132–138"}
+{"child": "mnemosyne", "parents": ["uranus", "gaia"], "work": "theogony", "passage": "132–138"}
+{"child": "phoebe", "parents": ["uranus", "gaia"], "work": "theogony", "passage": "132–138"}
+{"child": "tethys", "parents": ["uranus", "gaia"], "work": "theogony", "passage": "132–138"}
+{"child": "kronos", "parents": ["uranus", "gaia"], "work": "theogony", "passage": "132–138"}
+{"child": "cyclopes", "parents": ["uranus", "gaia"], "work": "theogony", "passage": "139–146"}
+{"child": "hecatoncheires", "parents": ["uranus", "gaia"], "work": "theogony", "passage": "147–153"}
+{"child": "erinyes", "parents": ["uranus", "gaia"], "work": "theogony", "passage": "183–186", "note": "from the blood of the castrated Uranus falling on Gaia"}
+{"child": "giants", "parents": ["uranus", "gaia"], "work": "theogony", "passage": "183–186", "note": "from the blood of the castrated Uranus falling on Gaia"}
+{"child": "aphrodite", "parents": ["uranus"], "work": "theogony", "passage": "188–200", "note": "from the foam around his severed genitals"}
+{"child": "moirai", "parents": ["nyx"], "work": "theogony", "passage": "211–222", "note": "without union"}
+{"child": "phorcys", "parents": ["pontus", "gaia"], "work": "theogony", "passage": "237–238"}
+{"child": "ceto", "parents": ["pontus", "gaia"], "work": "theogony", "passage": "237–238"}
+{"child": "medusa", "parents": ["phorcys", "ceto"], "work": "theogony", "passage": "270–277"}
+{"child": "pegasus", "parents": ["poseidon", "medusa"], "work": "theogony", "passage": "278–281", "note": "sprang from her neck when Perseus cut off her head"}
+{"child": "chrysaor", "parents": ["poseidon", "medusa"], "work": "theogony", "passage": "278–281", "note": "sprang from her neck when Perseus cut off her head"}
+{"child": "geryon", "parents": ["chrysaor", "callirhoe"], "work": "theogony", "passage": "287–288"}
+{"child": "orthus", "parents": ["typhon", "echidna"], "work": "theogony", "passage": "306–309"}
+{"child": "cerberus", "parents": ["typhon", "echidna"], "work": "theogony", "passage": "310–312"}
+{"child": "hydra", "parents": ["typhon", "echidna"], "work": "theogony", "passage": "313–314"}
+{"child": "nemean-lion", "parents": ["orthus"], "work": "theogony", "passage": "326–327", "note": "with Chimaera or Echidna; the text does not say which", "partial": true}
+{"child": "callirhoe", "parents": ["oceanus", "tethys"], "work": "theogony", "passage": "351"}
+{"child": "clymene", "parents": ["oceanus", "tethys"], "work": "theogony", "passage": "351"}
+{"child": "dione", "parents": ["oceanus", "tethys"], "work": "theogony", "passage": "353"}
+{"child": "metis", "parents": ["oceanus", "tethys"], "work": "theogony", "passage": "358"}
+{"child": "eurynome", "parents": ["oceanus", "tethys"], "work": "theogony", "passage": "358"}
+{"child": "helios", "parents": ["hyperion", "theia"], "work": "theogony", "passage": "371–374"}
+{"child": "selene", "parents": ["hyperion", "theia"], "work": "theogony", "passage": "371–374"}
+{"child": "eos", "parents": ["hyperion", "theia"], "work": "theogony", "passage": "371–374"}
+{"child": "leto", "parents": ["coeus", "phoebe"], "work": "theogony", "passage": "404–408"}
+{"child": "hestia", "parents": ["kronos", "rhea"], "work": "theogony", "passage": "453–458"}
+{"child": "demeter", "parents": ["kronos", "rhea"], "work": "theogony", "passage": "453–458"}
+{"child": "hera", "parents": ["kronos", "rhea"], "work": "theogony", "passage": "453–458"}
+{"child": "hades", "parents": ["kronos", "rhea"], "work": "theogony", "passage": "453–458"}
+{"child": "poseidon", "parents": ["kronos", "rhea"], "work": "theogony", "passage": "453–458"}
+{"child": "zeus", "parents": ["kronos", "rhea"], "work": "theogony", "passage": "453–458"}
+{"child": "atlas", "parents": ["iapetus", "clymene"], "work": "theogony", "passage": "507–511"}
+{"child": "menoetius", "parents": ["iapetus", "clymene"], "work": "theogony", "passage": "507–511"}
+{"child": "prometheus", "parents": ["iapetus", "clymene"], "work": "theogony", "passage": "507–511"}
+{"child": "epimetheus", "parents": ["iapetus", "clymene"], "work": "theogony", "passage": "507–511"}
+{"child": "typhon", "parents": ["tartarus", "gaia"], "work": "theogony", "passage": "820–822"}
+{"child": "athena", "parents": ["zeus", "metis"], "work": "theogony", "passage": "886–900, 924–926", "note": "born from the head of Zeus, who had swallowed Metis"}
+{"child": "horae", "parents": ["zeus", "themis"], "work": "theogony", "passage": "901–903"}
+{"child": "moirai", "parents": ["zeus", "themis"], "work": "theogony", "passage": "904–906"}
+{"child": "charites", "parents": ["zeus", "eurynome"], "work": "theogony", "passage": "907–909"}
+{"child": "persephone", "parents": ["zeus", "demeter"], "work": "theogony", "passage": "912–913"}
+{"child": "muses", "parents": ["zeus", "mnemosyne"], "work": "theogony", "passage": "53–62, 915–917"}
+{"child": "apollo", "parents": ["zeus", "leto"], "work": "theogony", "passage": "918–920"}
+{"child": "artemis", "parents": ["zeus", "leto"], "work": "theogony", "passage": "918–920"}
+{"child": "hebe", "parents": ["zeus", "hera"], "work": "theogony", "passage": "921–923"}
+{"child": "ares", "parents": ["zeus", "hera"], "work": "theogony", "passage": "921–923"}
+{"child": "eileithyia", "parents": ["zeus", "hera"], "work": "theogony", "passage": "921–923"}
+{"child": "hephaestus", "parents": ["hera"], "work": "theogony", "passage": "927–929", "note": "without union, in anger at Zeus"}
+{"child": "harmonia", "parents": ["ares", "aphrodite"], "work": "theogony", "passage": "933–937"}
+{"child": "maia", "parents": ["atlas"], "work": "theogony", "passage": "938", "partial": true}
+{"child": "hermes", "parents": ["zeus", "maia"], "work": "theogony", "passage": "938–939"}
+{"child": "dionysus", "parents": ["zeus", "semele"], "work": "theogony", "passage": "940–942"}
+{"child": "heracles", "parents": ["zeus", "alcmene"], "work": "theogony", "passage": "943–944"}
+{"child": "semele", "parents": ["cadmus", "harmonia"], "work": "theogony", "passage": "975–976"}
+{"child": "hephaestus", "parents": ["zeus", "hera"], "work": "iliad", "passage": "1.571–579"}
+{"child": "aphrodite", "parents": ["zeus", "dione"], "work": "iliad", "passage": "5.370–371"}
+{"child": "perseus", "parents": ["zeus", "danae"], "work": "iliad", "passage": "14.319–320"}
+{"child": "europa", "parents": ["phoenix"], "work": "iliad", "passage": "14.321", "partial": true}
+{"child": "sthenelus", "parents": ["perseus"], "work": "iliad", "passage": "19.116–124", "partial": true}
+{"child": "eurystheus", "parents": ["sthenelus"], "work": "iliad", "passage": "19.116–124", "partial": true}
+{"child": "pyrrha", "parents": ["epimetheus", "pandora"], "work": "library", "passage": "1.7.2"}
+{"child": "deucalion", "parents": ["prometheus"], "work": "library", "passage": "1.7.2", "partial": true}
+{"child": "deianira", "parents": ["oeneus"], "work": "library", "passage": "1.8.1", "note": "some say her father was Dionysus", "partial": true}
+{"child": "io", "parents": ["inachus"], "work": "prometheus-bound", "passage": "589–590", "partial": true}
+{"child": "io", "parents": ["iasus"], "work": "library", "passage": "2.1.3", "note": "Castor and many tragedians name Inachus; Hesiod and Acusilaus, Piren", "partial": true}
+{"child": "danae", "parents": ["acrisius"], "work": "library", "passage": "2.2.2", "partial": true}
+{"child": "perseus", "parents": ["zeus", "danae"], "work": "library", "passage": "2.4.1"}
+{"child": "andromeda", "parents": ["cepheus", "cassiopeia"], "work": "library", "passage": "2.4.3"}
+{"child": "alcaeus", "parents": ["perseus", "andromeda"], "work": "library", "passage": "2.4.5"}
+{"child": "electryon", "parents": ["perseus", "andromeda"], "work": "library", "passage": "2.4.5"}
+{"child": "sthenelus", "parents": ["perseus", "andromeda"], "work": "library", "passage": "2.4.5"}
+{"child": "amphitryon", "parents": ["alcaeus"], "work": "library", "passage": "2.4.5", "partial": true}
+{"child": "alcmene", "parents": ["electryon"], "work": "library", "passage": "2.4.5", "partial": true}
+{"child": "heracles", "parents": ["zeus", "alcmene"], "work": "library", "passage": "2.4.8"}
+{"child": "iphicles", "parents": ["amphitryon", "alcmene"], "work": "library", "passage": "2.4.8"}
+{"child": "iolaus", "parents": ["iphicles"], "work": "library", "passage": "2.4.11", "partial": true}
+{"child": "nemean-lion", "parents": ["typhon"], "work": "library", "passage": "2.5.1", "partial": true}
+{"child": "hyllus", "parents": ["heracles", "deianira"], "work": "library", "passage": "2.7.7"}
+{"child": "europa", "parents": ["agenor"], "work": "library", "passage": "3.1.1", "note": "and Telephassa; some call her a daughter of Phoenix", "partial": true}
+{"child": "cadmus", "parents": ["agenor"], "work": "library", "passage": "3.1.1", "partial": true}

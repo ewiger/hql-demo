@@ -1,0 +1,41 @@
+{"children":["Muses"],"lines":"53–62, 915–917","parents":["Zeus","Mnemosyne"]}
+{"children":["Erebus","Nyx"],"lines":"123","parents":["Chaos"]}
+{"children":["Aether","Hemera"],"lines":"124–125","parents":["Erebus","Nyx"]}
+{"children":["Uranus"],"lines":"126–128","parents":["Gaia"]}
+{"children":["Pontus"],"lines":"131–132","parents":["Gaia"]}
+{"children":["Oceanus","Coeus","Crius","Hyperion","Iapetus","Theia","Rhea","Themis","Mnemosyne","Phoebe","Tethys","Kronos"],"lines":"132–138","parents":["Uranus","Gaia"]}
+{"children":["Cyclopes"],"lines":"139–146","parents":["Uranus","Gaia"]}
+{"children":["Hundred-Handers"],"lines":"147–153","parents":["Uranus","Gaia"]}
+{"children":["Erinyes","Giants"],"lines":"183–186","parents":["Uranus","Gaia"]}
+{"children":["Aphrodite"],"lines":"188–200","parents":["Uranus"]}
+{"children":["Moirai"],"lines":"211–222","parents":["Nyx"]}
+{"children":["Phorcys","Ceto"],"lines":"237–238","parents":["Pontus","Gaia"]}
+{"children":["Medusa"],"lines":"270–277","parents":["Phorcys","Ceto"]}
+{"children":["Pegasus","Chrysaor"],"lines":"278–281","parents":["Poseidon","Medusa"]}
+{"children":["Geryon"],"lines":"287–288","parents":["Chrysaor","Callirhoe"]}
+{"children":["Orthus"],"lines":"306–309","parents":["Typhon","Echidna"]}
+{"children":["Cerberus"],"lines":"310–312","parents":["Typhon","Echidna"]}
+{"children":["Lernaean Hydra"],"lines":"313–314","parents":["Typhon","Echidna"]}
+{"children":["Nemean Lion"],"lines":"326–327","parents":["Orthus"]}
+{"children":["Callirhoe","Clymene"],"lines":"351","parents":["Oceanus","Tethys"]}
+{"children":["Dione"],"lines":"353","parents":["Oceanus","Tethys"]}
+{"children":["Metis","Eurynome"],"lines":"358","parents":["Oceanus","Tethys"]}
+{"children":["Helios","Selene","Eos"],"lines":"371–374","parents":["Hyperion","Theia"]}
+{"children":["Leto"],"lines":"404–408","parents":["Coeus","Phoebe"]}
+{"children":["Hestia","Demeter","Hera","Hades","Poseidon","Zeus"],"lines":"453–458","parents":["Kronos","Rhea"]}
+{"children":["Atlas","Menoetius","Prometheus","Epimetheus"],"lines":"507–511","parents":["Iapetus","Clymene"]}
+{"children":["Typhon"],"lines":"820–822","parents":["Tartarus","Gaia"]}
+{"children":["Athena"],"lines":"886–900, 924–926","parents":["Zeus","Metis"]}
+{"children":["Horae"],"lines":"901–903","parents":["Zeus","Themis"]}
+{"children":["Moirai"],"lines":"904–906","parents":["Zeus","Themis"]}
+{"children":["Charites"],"lines":"907–909","parents":["Zeus","Eurynome"]}
+{"children":["Persephone"],"lines":"912–913","parents":["Zeus","Demeter"]}
+{"children":["Apollo","Artemis"],"lines":"918–920","parents":["Zeus","Leto"]}
+{"children":["Hebe","Ares","Eileithyia"],"lines":"921–923","parents":["Zeus","Hera"]}
+{"children":["Hephaestus"],"lines":"927–929","parents":["Hera"]}
+{"children":["Harmonia"],"lines":"933–937","parents":["Ares","Aphrodite"]}
+{"children":["Maia"],"lines":"938","parents":["Atlas"]}
+{"children":["Hermes"],"lines":"938–939","parents":["Zeus","Maia"]}
+{"children":["Dionysus"],"lines":"940–942","parents":["Zeus","Semele"]}
+{"children":["Heracles"],"lines":"943–944","parents":["Zeus","Alcmene"]}
+{"children":["Semele"],"lines":"975–976","parents":["Cadmus","Harmonia"]}

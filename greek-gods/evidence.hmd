@@ -1,0 +1,79 @@
+# The evidence
+
+How do we know these gods were worshipped, and since when? Three kinds of
+evidence: their names on the clay tablets of the Mycenaean palaces, the
+sanctuaries where they had cult, and the texts that tell their myths.
+
+Each kind is a module of `lib/myth/` that implements the trait `Evidence`:
+the trait declares `subject`, `dated`, `kind` and `reference` without a
+body, and each module supplies them for its own type. `Witness` is the
+union of the three types, so one list holds every piece of evidence.
+
+```hql id=ev hidden
+import myth.kb
+import myth.beings
+import myth.tablets
+import myth.sites
+import myth.evidence
+
+witnesses = evidence.witnesses()
+first = (being: String, kind: String) => evidence.earliest(witnesses, being, kind).unwrap_or("")
+
+{
+    tablets: evidence.tablets()
+        | map(t => {tablet: t.id, palace: t.site, god: kb.name(t.being), form: t.form, syllabary: t.glyphs(), secure: t.secure, note: t.note})
+        | Table(columns = ["tablet", "palace", "god", "form", "syllabary", "secure", "note"]),
+    sites: evidence.sites()
+        | sort(by = s => s.year)
+        | map(s => {site: s.name, place: s.place, god: kb.name(s.being), date: s.dating, note: s.note})
+        | Table(columns = ["site", "place", "god", "date", "note"]),
+    first: kb.beings()
+        | filter(b => b.olympian() or b.id == "hestia" or b.id == "hades" or b.id == "heracles")
+        | map(b => {god: b.name, earliest: first(b.id, ""), first_text: first(b.id, "text")})
+        | Table(columns = ["god", "earliest", "first_text"]),
+}
+```
+
+All three tables are built in the hidden cell above, the one cell of this
+document that imports the evidence modules; the cells below write them.
+
+## Linear B
+
+Linear B is the script of the Mycenaean palaces, deciphered by Michael
+Ventris in 1952 as the earliest written Greek. The tablets survive because
+the fires that destroyed the palaces baked them: Knossos around 1375 BCE,
+Pylos around 1200. Several Olympians are named on them, five centuries
+before Homer. The syllabary column is written by the `greek` package from
+the transliteration.
+
+```hql
+ev.tablets
+```
+<!-- hql:output hash=fc4e7bf337c2 status=ok -->
+"Table([{form: \"di-ka-ta-jo di-we\", god: \"Zeus\", note: \"oil to Diktaian Zeus\", palace: \"Knossos\", secure: true, syllabary: \"𐀇𐀏𐀲𐀍𐄀𐀇𐀸\", tablet: \"KN Fp 1\"}, {form: \"e-ri-nu\", god: \"Erinyes\", note: \"oil to Erinys\", palace: \"Knossos\", secure: true, syllabary: \"𐀁𐀪𐀝\", tablet: \"KN Fp 1\"}, {form: \"a-ta-na-po-ti-ni-ja\", god: \"Athena\", note: \"read as 'Mistress of Atana'; whether this is Athena is debated\", palace: \"Knossos\", secure: false, syllabary: \"𐀀𐀲𐀙𐀡𐀴𐀛𐀊\", tablet: \"KN V 52\"}, {form: \"e-nu-wa-ri-jo\", god: \"Ares\", note: \"Enyalios, later an epithet of Ares\", palace: \"Knossos\", secure: false, syllabary: \"𐀁𐀝𐀷𐀪𐀍\", tablet: \"KN V 52\"}, {form: \"pa-ja-wo-ne\", god: \"Apollo\", note: \"Paiawon, later Paean, an epithet of Apollo\", palace: \"Knossos\", secure: false, syllabary: \"𐀞𐀊𐀺𐀚\", tablet: \"KN V 52\"}, {form: \"e-re-u-ti-ja\", god: \"Eileithyia\", note: \"honey to Eileithyia at Amnisos\", palace: \"Knossos\", secure: true, syllabary: \"𐀁𐀩𐀄𐀴𐀊\", tablet: \"KN Gg 705\"}, {form: \"a-pa-i-ti-jo\", god: \"Hephaestus\", note: \"a man's name, Haphaistios, derived from the god's\", palace: \"Knossos\", secure: false, syllabary: \"𐀀𐀞𐀂𐀴𐀍\", tablet: \"KN L 588\"}, {form: \"di-wo-nu-so\", god: \"Dionysus\", note: \"honey to Zeus and Dionysus\", palace: \"Chania\", secure: true, syllabary: \"𐀇𐀺𐀝𐀰\", tablet: \"KH Gq 5\"}, {form: \"di-we\", god: \"Zeus\", note: \"a vessel and a man to Zeus\", palace: \"Pylos\", secure: true, syllabary: \"𐀇𐀸\", tablet: \"PY Tn 316\"}, {form: \"e-ra\", god: \"Hera\", note: \"a vessel and a woman to Hera\", palace: \"Pylos\", secure: true, syllabary: \"𐀁𐀨\", tablet: \"PY Tn 316\"}, {form: \"e-ma-a2\", god: \"Hermes\", note: \"a vessel and a man to Hermes\", palace: \"Pylos\", secure: true, syllabary: \"𐀁𐀔𐁀\", tablet: \"PY Tn 316\"}, {form: \"po-se-da-o-ne\", god: \"Poseidon\", note: \"grain, wine, a bull and cheeses to Poseidon\", palace: \"Pylos\", secure: true, syllabary: \"𐀡𐀮𐀅𐀃𐀚\", tablet: \"PY Un 718\"}, {form: \"a-te-mi-to\", god: \"Artemis\", note: \"a slave of Artemis\", palace: \"Pylos\", secure: true, syllabary: \"𐀀𐀳𐀖𐀵\", tablet: \"PY Es 650\"}, {form: \"da-ma-te\", god: \"Demeter\", note: \"read by some as Demeter, by others as a word for household land\", palace: \"Pylos\", secure: false, syllabary: \"𐀅𐀔𐀳\", tablet: \"PY En 609\"}], columns = [\"tablet\", \"palace\", \"god\", \"form\", \"syllabary\", \"secure\", \"note\"])"
+<!-- /hql:output -->
+
+## Sanctuaries
+
+Places of cult, oldest first.
+
+```hql
+ev.sites
+```
+<!-- hql:output hash=8ac7b3fcc073 status=ok -->
+"Table([{date: \"c. 1200 BCE\", god: \"Aphrodite\", note: \"Aphrodite goes to her precinct and altar at Paphos, Odyssey 8.362–363\", place: \"Palaepaphos, Cyprus\", site: \"Sanctuary of Aphrodite\"}, {date: \"first temple 8th century BCE\", god: \"Hera\", note: \"Herodotus 3.60 calls its later temple the largest he knew\", place: \"Samos\", site: \"Heraion of Samos\"}, {date: \"sanctuary from the 8th century BCE\", god: \"Apollo\", note: \"the standing temple is of the 4th century BCE\", place: \"Delphi\", site: \"Sanctuary of Apollo\"}, {date: \"c. 690–650 BCE\", god: \"Poseidon\", note: \"one of the earliest monumental temples in Greece; seat of the Isthmian Games\", place: \"Isthmia\", site: \"Temple of Poseidon\"}, {date: \"c. 600 BCE\", god: \"Hera\", note: \"the Hermes of Praxiteles was found in it in 1877\", place: \"Olympia\", site: \"Temple of Hera\"}, {date: \"c. 600 BCE\", god: \"Apollo\", note: \"a Naxian dedication in the sanctuary of Apollo's birthplace\", place: \"Delos\", site: \"Terrace of the Lions\"}, {date: \"c. 560–550 BCE\", god: \"Artemis\", note: \"Croesus gave most of its columns, Herodotus 1.92; burned in 356 BCE; its rebuilt successor was counted among the Seven Wonders\", place: \"Ephesus\", site: \"Temple of Artemis\"}, {date: \"lead oracle tablets 6th–3rd century BCE\", god: \"Zeus\", note: \"Achilles prays to Zeus of Dodona, Iliad 16.233–235\", place: \"Dodona\", site: \"Oracle of Zeus\"}, {date: \"c. 470–456 BCE\", god: \"Zeus\", note: \"held the gold-and-ivory Zeus of Pheidias, c. 435 BCE\", place: \"Olympia\", site: \"Temple of Zeus\"}, {date: \"c. 460 BCE\", god: \"Heracles\", note: \"the twelve labours, six over each porch\", place: \"Olympia\", site: \"Metopes of the Temple of Zeus\"}, {date: \"c. 450–400 BCE\", god: \"Apollo\", note: \"Pausanias 8.41.9 names Iktinos as its architect\", place: \"Bassae\", site: \"Temple of Apollo Epikourios\"}, {date: \"c. 449–415 BCE\", god: \"Hephaestus\", note: \"the best-preserved Doric temple in Greece\", place: \"Athens\", site: \"Temple of Hephaestus\"}, {date: \"447–432 BCE\", god: \"Athena\", note: \"its west pediment showed the contest with Poseidon, Pausanias 1.24.5\", place: \"Athens\", site: \"Parthenon\"}, {date: \"c. 444–440 BCE\", god: \"Poseidon\", note: \"on the cape at the southern tip of Attica\", place: \"Sounion\", site: \"Temple of Poseidon\"}, {date: \"c. 440 BCE\", god: \"Ares\", note: \"moved to the Agora and rebuilt there in the late 1st century BCE\", place: \"Athens\", site: \"Temple of Ares\"}, {date: \"rebuilt in the 5th century BCE\", god: \"Demeter\", note: \"on the site of the temple the Hymn to Demeter has her command, lines 270–274, and of the rites she teaches, 473–479\", place: \"Eleusis\", site: \"Telesterion\"}, {date: \"stone theatre c. 330 BCE\", god: \"Dionysus\", note: \"the Bacchae was first staged here in 405 BCE, in the theatre as it was before the stone rebuilding\", place: \"Athens\", site: \"Theatre of Dionysus Eleuthereus\"}], columns = [\"site\", \"place\", \"god\", \"date\", \"note\"])"
+<!-- /hql:output -->
+
+## First attested
+
+For each god, the earliest witness of any kind and the earliest text, each
+written by `line`, the trait's default body. A god with no tablet is first
+named in Homer or Hesiod; Aphrodite's oldest witness is her sanctuary at
+Paphos.
+
+```hql
+ev.first
+```
+<!-- hql:output hash=258f68949950 status=ok -->
+"Table([{earliest: \"c. 700 BCE, text: Hesiod, Theogony 453–458\", first_text: \"c. 700 BCE, text: Hesiod, Theogony 453–458\", god: \"Hestia\"}, {earliest: \"c. 1200 BCE, tablet: PY En 609 (Pylos), da-ma-te 𐀅𐀔𐀳, reading disputed\", first_text: \"c. 700 BCE, text: Hesiod, Theogony 453–458\", god: \"Demeter\"}, {earliest: \"c. 1200 BCE, tablet: PY Tn 316 (Pylos), e-ra 𐀁𐀨\", first_text: \"c. 725 BCE, text: Homer, Iliad 1.571–579\", god: \"Hera\"}, {earliest: \"c. 725 BCE, text: Homer, Iliad 15.187–193\", first_text: \"c. 725 BCE, text: Homer, Iliad 15.187–193\", god: \"Hades\"}, {earliest: \"c. 1200 BCE, tablet: PY Un 718 (Pylos), po-se-da-o-ne 𐀡𐀮𐀅𐀃𐀚\", first_text: \"c. 725 BCE, text: Homer, Iliad 15.187–193\", god: \"Poseidon\"}, {earliest: \"c. 1375 BCE, tablet: KN Fp 1 (Knossos), di-ka-ta-jo di-we 𐀇𐀏𐀲𐀍𐄀𐀇𐀸\", first_text: \"c. 725 BCE, text: Homer, Iliad 1.571–579\", god: \"Zeus\"}, {earliest: \"c. 1375 BCE, tablet: KN V 52 (Knossos), a-ta-na-po-ti-ni-ja 𐀀𐀲𐀙𐀡𐀴𐀛𐀊, reading disputed\", first_text: \"c. 700 BCE, text: Hesiod, Theogony 886–900, 924–926\", god: \"Athena\"}, {earliest: \"c. 1375 BCE, tablet: KN V 52 (Knossos), pa-ja-wo-ne 𐀞𐀊𐀺𐀚, reading disputed\", first_text: \"c. 700 BCE, text: Hesiod, Theogony 918–920\", god: \"Apollo\"}, {earliest: \"c. 1200 BCE, tablet: PY Es 650 (Pylos), a-te-mi-to 𐀀𐀳𐀖𐀵\", first_text: \"c. 700 BCE, text: Hesiod, Theogony 918–920\", god: \"Artemis\"}, {earliest: \"c. 1375 BCE, tablet: KN V 52 (Knossos), e-nu-wa-ri-jo 𐀁𐀝𐀷𐀪𐀍, reading disputed\", first_text: \"c. 700 BCE, text: Hesiod, Theogony 921–923\", god: \"Ares\"}, {earliest: \"c. 1200 BCE, site: Sanctuary of Aphrodite, Palaepaphos, Cyprus (c. 1200 BCE)\", first_text: \"c. 725 BCE, text: Homer, Iliad 5.370–371\", god: \"Aphrodite\"}, {earliest: \"c. 1375 BCE, tablet: KN L 588 (Knossos), a-pa-i-ti-jo 𐀀𐀞𐀂𐀴𐀍, reading disputed\", first_text: \"c. 725 BCE, text: Homer, Iliad 1.571–579\", god: \"Hephaestus\"}, {earliest: \"c. 1200 BCE, tablet: PY Tn 316 (Pylos), e-ma-a2 𐀁𐀔𐁀\", first_text: \"c. 700 BCE, text: Hesiod, Theogony 938–939\", god: \"Hermes\"}, {earliest: \"c. 1250 BCE, tablet: KH Gq 5 (Chania), di-wo-nu-so 𐀇𐀺𐀝𐀰\", first_text: \"c. 700 BCE, text: Hesiod, Theogony 940–942\", god: \"Dionysus\"}, {earliest: \"c. 725 BCE, text: Homer, Iliad 19.95–133\", first_text: \"c. 725 BCE, text: Homer, Iliad 19.95–133\", god: \"Heracles\"}], columns = [\"god\", \"earliest\", \"first_text\"])"
+<!-- /hql:output -->

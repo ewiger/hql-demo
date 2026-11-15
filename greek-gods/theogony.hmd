@@ -1,0 +1,158 @@
+# From Chaos to Zeus
+
+Hesiod's *Theogony*, composed around 700 BCE, tells how the world and its
+gods came to be. First Chaos comes into being, then Gaia, Tartarus and
+Eros. Gaia bears Uranus, the sky, and with him the Titans. Kronos, the
+youngest Titan, castrates Uranus and rules until his own son Zeus
+overthrows him. The order of the [[olympians]] is the end of that
+succession.
+
+```hql id=names hidden
+import myth.kb
+
+to_map(kb.beings(), b => b.id, b => b.name)
+```
+
+## The births, in the poem's order
+
+Every birth the *Theogony* tells, each set of parents once with the
+children the passage gives them. One parent alone means a birth without
+union: Gaia bears Uranus and Pontus by herself, and Hera bears Hephaestus.
+
+```hql
+import myth.kb
+
+fn opening(passage: String) : Int =
+    passage.split(",")[0].unwrap_or("").split("–")[0].unwrap_or("") | to_int | unwrap_or(0)
+
+type Births { lines : String, parents : String, children : String }
+
+name = (id: String) => names.get(id).unwrap_or(id)
+
+kb.parentage()
+| filter(a => a.work == "theogony")
+| group(by = a => fmt("{} {}", a.passage, a.parents | join(" ")))
+| map(g => Births(
+    lines    = g.items[0].map(a => a.passage).unwrap_or(""),
+    parents  = g.items[0].map(a => a.parents).unwrap_or([]) | map(name) | join(" and "),
+    children = g.items | map(a => name(a.child)) | join(", "),
+  ))
+| sort(by = b => opening(b.lines))
+| Table(columns = ["lines", "parents", "children"])
+```
+<!-- hql:output hash=8bd2e12a761c status=ok -->
+| lines            | parents                | children                                                                                         |
+| ---------------- | ---------------------- | ------------------------------------------------------------------------------------------------ |
+| 53–62, 915–917   | Zeus and Mnemosyne     | Muses                                                                                            |
+| 123              | Chaos                  | Erebus, Nyx                                                                                      |
+| 124–125          | Erebus and Nyx         | Aether, Hemera                                                                                   |
+| 126–128          | Gaia                   | Uranus                                                                                           |
+| 131–132          | Gaia                   | Pontus                                                                                           |
+| 132–138          | Uranus and Gaia        | Oceanus, Coeus, Crius, Hyperion, Iapetus, Theia, Rhea, Themis, Mnemosyne, Phoebe, Tethys, Kronos |
+| 139–146          | Uranus and Gaia        | Cyclopes                                                                                         |
+| 147–153          | Uranus and Gaia        | Hundred-Handers                                                                                  |
+| 183–186          | Uranus and Gaia        | Erinyes, Giants                                                                                  |
+| 188–200          | Uranus                 | Aphrodite                                                                                        |
+| 211–222          | Nyx                    | Moirai                                                                                           |
+| 237–238          | Pontus and Gaia        | Phorcys, Ceto                                                                                    |
+| 270–277          | Phorcys and Ceto       | Medusa                                                                                           |
+| 278–281          | Poseidon and Medusa    | Pegasus, Chrysaor                                                                                |
+| 287–288          | Chrysaor and Callirhoe | Geryon                                                                                           |
+| 306–309          | Typhon and Echidna     | Orthus                                                                                           |
+| 310–312          | Typhon and Echidna     | Cerberus                                                                                         |
+| 313–314          | Typhon and Echidna     | Lernaean Hydra                                                                                   |
+| 326–327          | Orthus                 | Nemean Lion                                                                                      |
+| 351              | Oceanus and Tethys     | Callirhoe, Clymene                                                                               |
+| 353              | Oceanus and Tethys     | Dione                                                                                            |
+| 358              | Oceanus and Tethys     | Metis, Eurynome                                                                                  |
+| 371–374          | Hyperion and Theia     | Helios, Selene, Eos                                                                              |
+| 404–408          | Coeus and Phoebe       | Leto                                                                                             |
+| 453–458          | Kronos and Rhea        | Hestia, Demeter, Hera, Hades, Poseidon, Zeus                                                     |
+| 507–511          | Iapetus and Clymene    | Atlas, Menoetius, Prometheus, Epimetheus                                                         |
+| 820–822          | Tartarus and Gaia      | Typhon                                                                                           |
+| 886–900, 924–926 | Zeus and Metis         | Athena                                                                                           |
+| 901–903          | Zeus and Themis        | Horae                                                                                            |
+| 904–906          | Zeus and Themis        | Moirai                                                                                           |
+| 907–909          | Zeus and Eurynome      | Charites                                                                                         |
+| 912–913          | Zeus and Demeter       | Persephone                                                                                       |
+| 918–920          | Zeus and Leto          | Apollo, Artemis                                                                                  |
+| 921–923          | Zeus and Hera          | Hebe, Ares, Eileithyia                                                                           |
+| 927–929          | Hera                   | Hephaestus                                                                                       |
+| 933–937          | Ares and Aphrodite     | Harmonia                                                                                         |
+| 938              | Atlas                  | Maia                                                                                             |
+| 938–939          | Zeus and Maia          | Hermes                                                                                           |
+| 940–942          | Zeus and Semele        | Dionysus                                                                                         |
+| 943–944          | Zeus and Alcmene       | Heracles                                                                                         |
+| 975–976          | Cadmus and Harmonia    | Semele                                                                                           |
+<!-- /hql:output -->
+
+## The succession
+
+The myths of the succession, in the order they happen, and where each is
+told.
+
+```hql
+import myth.kb
+import myth.stories
+
+works = kb.works()
+
+kb.myths()
+| filter(m => m.seq <= 9)
+| map(m => {myth: m.title, told: m.sources(works) | join("; ")})
+| Table(columns = ["myth", "told"])
+```
+<!-- hql:output hash=190d4dacacc8 status=ok -->
+| myth                             | told                                                               |
+| -------------------------------- | ------------------------------------------------------------------ |
+| The first beings                 | Hesiod, Theogony 116–125                                           |
+| Gaia bears Uranus and the Titans | Hesiod, Theogony 126–153                                           |
+| Kronos castrates Uranus          | Hesiod, Theogony 154–206; Pseudo-Apollodorus, Library 1.1.4        |
+| Kronos swallows his children     | Hesiod, Theogony 453–491; Pseudo-Apollodorus, Library 1.1.5–1.1.7  |
+| Zeus frees his siblings          | Hesiod, Theogony 492–506; Pausanias, Description of Greece 10.24.6 |
+| The war of the Titans            | Hesiod, Theogony 617–720; Pseudo-Apollodorus, Library 1.2.1        |
+| The world divided by lot         | Homer, Iliad 15.187–193                                            |
+| Typhon                           | Hesiod, Theogony 820–880; Pseudo-Apollodorus, Library 1.6.3        |
+| The war of the Giants            | Pseudo-Apollodorus, Library 1.6.1–1.6.2                            |
+<!-- /hql:output -->
+
+## Where the sources disagree
+
+The same being, born of different parents in different works. Hesiod even
+disagrees with himself: the Moirai are daughters of Night at one point of
+the poem and of Zeus and Themis at another.
+
+```hql
+import myth.kb
+import myth.works
+from myth.genealogy import accounts, disputed
+
+works = kb.works()
+births = kb.parentage()
+name = (id: String) => names.get(id).unwrap_or(id)
+
+disputed(births)
+| flat_map(child => accounts(births, child) | map(a => {
+    being: name(child),
+    parents: a.parents | map(name) | join(" and "),
+    source: works | find(w => w.id == a.work) | map(w => w.cite(a.passage)) | unwrap_or(a.work),
+    note: a.note.unwrap_or(""),
+  }))
+| Table(columns = ["being", "parents", "source", "note"])
+```
+<!-- hql:output hash=b2c374f2f918 status=ok -->
+| being       | parents         | source                              | note                                                                 |
+| ----------- | --------------- | ----------------------------------- | -------------------------------------------------------------------- |
+| Aphrodite   | Uranus          | Hesiod, Theogony 188–200            | from the foam around his severed genitals                            |
+| Aphrodite   | Zeus and Dione  | Homer, Iliad 5.370–371              |                                                                      |
+| Europa      | Phoenix         | Homer, Iliad 14.321                 |                                                                      |
+| Europa      | Agenor          | Pseudo-Apollodorus, Library 3.1.1   | and Telephassa; some call her a daughter of Phoenix                  |
+| Hephaestus  | Hera            | Hesiod, Theogony 927–929            | without union, in anger at Zeus                                      |
+| Hephaestus  | Zeus and Hera   | Homer, Iliad 1.571–579              |                                                                      |
+| Io          | Inachus         | Aeschylus, Prometheus Bound 589–590 |                                                                      |
+| Io          | Iasus           | Pseudo-Apollodorus, Library 2.1.3   | Castor and many tragedians name Inachus; Hesiod and Acusilaus, Piren |
+| Moirai      | Nyx             | Hesiod, Theogony 211–222            | without union                                                        |
+| Moirai      | Zeus and Themis | Hesiod, Theogony 904–906            |                                                                      |
+| Nemean Lion | Orthus          | Hesiod, Theogony 326–327            | with Chimaera or Echidna; the text does not say which                |
+| Nemean Lion | Typhon          | Pseudo-Apollodorus, Library 2.5.1   |                                                                      |
+<!-- /hql:output -->

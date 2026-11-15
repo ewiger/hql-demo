@@ -2,9 +2,11 @@ name: CI
 
 # Build hql from a given ref and run a representative subset of the use
 # cases against it, each with its own containers: `postgres` (an endpoint
-# and a round trip), `ledger` (a transaction, and two of them racing) and
-# `crypto` (no service). The full `run-all.sh` stays a pre-release gate run
-# by hand; it needs Kafka, NATS and Spark, which are slow to start here.
+# and a round trip), `ledger` (a transaction, and two of them racing),
+# `crypto` (no service) and `greek-gods` (no service; HQL modules, a vault
+# of documents and a Rust extension hql builds from a local crate). The
+# full `run-all.sh` stays a pre-release gate run by hand; it needs Kafka,
+# NATS and Spark, which are slow to start here.
 
 on:
   push:
@@ -17,12 +19,12 @@ on:
         default: main
       cases:
         description: Cases to run, separated by spaces, or "all"
-        default: postgres ledger crypto
+        default: postgres ledger crypto greek-gods
 
 env:
   CARGO_TERM_COLOR: always
   HQL_REF: ${{ inputs.hql_ref || 'main' }}
-  CASES: ${{ inputs.cases || 'postgres ledger crypto' }}
+  CASES: ${{ inputs.cases || 'postgres ledger crypto greek-gods' }}
 
 jobs:
   cases:

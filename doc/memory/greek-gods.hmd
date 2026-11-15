@@ -1,0 +1,132 @@
+# Greek Gods
+
+## What the case is for
+
+`greek-gods/` is the case that uses every way HQL is meant to be extended,
+together, over data worth reading. The data is a real knowledge base of
+Greek myth, not a toy: each birth with the work and line that gives it, the
+myths with their sources, the Linear B attestations and the sanctuaries.
+The case exercises:
+
+- **HyperMarkdown documents with HQL cells**: the `*.hmd` files are the
+  cards of a vault, and their cells keep their outputs, like a notebook's.
+- **Library modules written in HQL**: `lib/myth/`, a module root, with
+  receiver modules over their own types, a trait with bodyless functions
+  implemented by three receiver modules, private helpers, and a module
+  that reads the records kept beside it.
+- **A local crate as an extension**: `greek/` declares the module `greek`
+  with four functions and no bodies, implements them in Rust, and is
+  loaded by listing it under `[packages] paths`. hql builds it on the
+  first run, so a program, a module and a document all call it.
+
+When hql gains a feature for modules, documents or packages, this case is
+where it belongs.
+
+## How it is built
+
+- The records live in `lib/myth/records/` and are read only through
+  `myth.kb` and `myth.evidence`. A relative path in a module is read
+  against the module's directory, so no program or document names a file.
+- The documents sit at the case root and the vault's `wiki` is `"."`,
+  because a document may read only files under its own directory. That
+  holds for files a module reads on the document's behalf too.
+- `run.sh` renders each document with `--emit after` and compares the result
+  with the committed file: a document must reproduce itself, outputs
+  included. After changing data, a module or a cell, run
+  `hql render --emit after --in-place <doc>.hmd` once per document. Several
+  documents in one invocation fail, for the reason under *A trait's named
+  type, imported twice* below.
+- The crate depends on `hql = "0.7"`. hql builds it against its own source
+  tree, patching that dependency, so it compiles against an unreleased
+  `main`. `run.sh` runs the crate's tests the same way, with
+  `--config patch.crates-io.hql.path=…`.
+- The data was checked against the texts (Perseus, theoi.com) and the
+  Linear B corpus (LiBER, DAMOS). Corrections that check made: Io is the
+  daughter of Iasus in Apollodorus 2.1.3, and Inachus is his variant;
+  Apollodorus does not have Heracles wear the Nemean lion's skin; in
+  Euripides the madness follows the labours; PY Tn 316 gives Zeus a vessel
+  and a man, and the metal is uncertain.
+- An account of a birth is `partial` when the source names one parent
+  without denying the other. Without that flag no rule over the parents
+  alone is right: equal sets make Homer's "son of Perseus" contradict
+  Apollodorus's "son of Perseus and Andromeda", and a subset makes
+  Hesiod's Hephaestus, born of Hera alone, agree with Homer's, the son of
+  Zeus and Hera.
+
+## Where hql does not do what its book says
+
+Each was found while writing the case and is avoided in it. Each entry
+says how to show it.
+
+### A trait's default body runs in the implementing module's scope
+
+A default body that calls a function of the trait's own module checks, and
+fails when it runs: `` `era` is not bound ``. It works only if the
+*implementing* module imports `era` itself.
+
+```text
+module myth                                   module myth.tablets for Tablet : Evidence
+fn era(year: Int) : String = …                import myth
+trait Evidence as Witness {                   …
+    fn line(self) : String = fmt("{}", era(self.dated()))
+}
+```
+
+Workaround: the default `line` in `myth` calls no function of its module.
+
+### A trait's named type, imported twice
+
+When two cells of one document, or two documents of one `hql render`, each
+import a module that declares `trait … as Witness`, the second import is
+refused: `type constructor Witness is already declared`. Two cells
+importing a module of plain types are fine.
+
+Workaround: `myth.kb`, which most cells import, does not import `myth`;
+the evidence is in `myth.evidence`. `evidence.hmd` imports it in one
+hidden cell that builds all three tables, and its other cells read that
+cell's value. `run.sh` renders one document per invocation.
+
+### A receiver module's `for` type is looked up in the importer
+
+`module olympus.gods for God`, with `God` declared in `olympus` and
+`import olympus` in the module, checks only where the program imports
+`olympus` first; otherwise `unknown type God`. A module is meant to be a
+closure.
+
+Workaround: each receiver module declares the type it is for.
+
+### A function sees only what is declared above it
+
+`fn a() : Int = b()` followed by `fn b() : Int = 1` is `` `b` is not
+bound ``, in a program and in a module alike. The book's page on how names
+resolve says the order of declarations does not matter.
+
+Workaround: helpers are written before their first use.
+
+### A program's type named like a standard type has no constructor
+
+`type Entry { … }` in a program, then `Entry(…)`, is `` `Entry` is not
+bound ``: `io.fs` declares an `Entry`, though the program does not import
+`io.fs`.
+
+Workaround: other names.
+
+### One name from two project modules
+
+`from a import excuse` and `from b import excuse`, over two receiver
+types: `x.excuse()` is chosen by `x`'s type, but `excuse(x)` is ambiguous.
+The book's page on `variance` says the input's type chooses, and it does
+for standard modules.
+
+## Friction, not bugs
+
+- A binding inside a block takes no type, `rows : Seq<Being> = …`, and the
+  type `source` decodes to does not flow through `| List`. A function whose
+  declared result is `Seq<Being>` gives `source` its type.
+- The fields of an anonymous record are `Data`, so `sort(by = r => 0 -
+  r.count)` does not check over them. Declare the row type.
+- A package's contract must `import core` to name `String`; the refusal
+  says so.
+- A doc string must follow an empty line, inside a trait's body too.
+- `uplinks` are the links a card writes, `downlinks` the links written to
+  it.

@@ -1,0 +1,27 @@
+# The `greek` package: Greek script for HQL, implemented in Rust. A program
+# reaches it as an ordinary module, `import greek`; the module's contract,
+# modules/greek/mod.hql, declares its functions without bodies, and this
+# crate's extension implements them. The project's .hql/config.toml lists
+# the crate under `[packages] paths`, so hql builds it on the first run.
+[package]
+name = "hql-ext-greek"
+version = "0.1.0"
+edition = "2024"
+publish = false
+description = "HQL package `greek`: transliteration, diacritics, alphabetic numerals and Linear B"
+
+[lib]
+crate-type = ["cdylib", "rlib"]
+
+[dependencies]
+hql = "0.7"
+# The version hql itself locks, so the crate brings nothing new to resolve.
+unicode-normalization = "0.1.26"
+
+[package.metadata.hql]
+package = "greek"
+provides = ["greek"]
+modules = "modules"
+
+# A package is its own workspace: it is built from where it is checked out.
+[workspace]
