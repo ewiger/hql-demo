@@ -3,7 +3,7 @@
 //
 // The table is created where none exists, a column per field of `Event`:
 // `id` BIGINT, `amount` NUMERIC, the rest TEXT. `mode = "replace"` in
-// hql.toml empties the table first and keeps its definition.
+// .hql/config.toml empties the table first and keeps its definition.
 
 type Event {
     id       : Int
