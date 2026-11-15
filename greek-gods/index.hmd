@@ -130,11 +130,12 @@ cards
 | Table(columns = ["card", "title", "links_to", "linked_from"])
 ```
 <!-- hql:output hash=8fb7c078ce65 status=ok -->
-| card      | title                           | links_to                                | linked_from      |
-| --------- | ------------------------------- | --------------------------------------- | ---------------- |
-| evidence  | The evidence                    |                                         | heracles, index  |
-| heracles  | Heracles                        | evidence                                | index            |
-| index     | Greek myth, as a knowledge base | evidence, heracles, olympians, theogony |                  |
-| olympians | The Olympians                   | theogony                                | index, theogony  |
-| theogony  | From Chaos to Zeus              | olympians                               | index, olympians |
+| card      | title                                         | links_to                                | linked_from      |
+| --------- | --------------------------------------------- | --------------------------------------- | ---------------- |
+| README    | Greek Gods: an HQL demo over a small ontology |                                         |                  |
+| evidence  | The evidence                                  |                                         | heracles, index  |
+| heracles  | Heracles                                      | evidence                                | index            |
+| index     | Greek myth, as a knowledge base               | evidence, heracles, olympians, theogony |                  |
+| olympians | The Olympians                                 | theogony                                | index, theogony  |
+| theogony  | From Chaos to Zeus                            | olympians                               | index, olympians |
 <!-- /hql:output -->

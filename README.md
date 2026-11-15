@@ -351,8 +351,9 @@ Greek myth, from Chaos to Heracles among the gods, sourced line by line:
 103 beings with their Greek names, 98 accounts of a birth each with the
 work and passage that gives it, 49 myths in the order they happen, 17
 ancient works with their dates, 14 names of gods on Linear B tablets and
-17 sanctuaries. It is three things at once, each the way HQL means it to
-be used:
+17 sanctuaries. Its own [README](greek-gods/README.md) is the technical
+guide: the ontology, the Rust module and how to change either. The case is
+three things at once, each the way HQL means it to be used:
 
 ```text
 greek-gods/
