@@ -21,9 +21,7 @@ the output with `expected/`.
 
 ## Running
 
-The cases work with **hql `main` after 0.7.0**. They use the `from` import
-statement of [HQL-0060](https://github.com/ewiger/hql/blob/main/doc/proposals/HQL-0060/index.hmd),
-which 0.7.0 does not have.
+The cases work with **hql 0.7.1**.
 
 You need Docker with Compose, and an `hql` binary built from the sibling
 `hql` repository (`cargo build` there) or on the `PATH`; set `HQL` to use
