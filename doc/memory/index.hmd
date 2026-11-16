@@ -1,0 +1,14 @@
+# Memory
+
+`doc/memory/` holds what working on hql-demo taught that is not yet stated
+where it belongs: why a case is built the way it is, and what hql did that
+its book does not say. It is a staging area, not an archive.
+
+A note stays only while it is undigested. Once what it says is in the place
+that owns it, a case's section of the [README](../../README.md), an issue or
+a fix in [hql](https://github.com/ewiger/hql), the note, or the part of it,
+is deleted.
+
+| Note | About |
+| --- | --- |
+| [greek-gods](greek-gods.hmd) | what the Greek Gods case is for, how it is built, and the hql gaps it works around |

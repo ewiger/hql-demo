@@ -3,6 +3,7 @@
 import io.env
 import io.fs
 import crypto
+from crypto import read_public_key
 import crypto.digest
 import encoding
 

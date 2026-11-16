@@ -1,0 +1,174 @@
+# The Olympians
+
+Kronos and Rhea had six children: Hestia, Demeter, Hera, Hades, Poseidon
+and Zeus. Kronos swallowed each one at birth, except Zeus, whom Rhea hid in
+Crete. The twelve gods of the Parthenon's east frieze are five of these
+with seven of the next generation. Hades lives below, and Dionysus takes
+the place among the twelve that Hestia sometimes has.
+
+```hql id=gods hidden
+import myth.kb
+import myth.beings
+
+kb.beings() | filter(b => b.olympian() or b.id == "hestia" or b.id == "hades")
+```
+
+## Names
+
+Each Greek name as written, in Latin letters and without its marks, the
+Roman name, and the god's article in [[wikipedia]]. The Latin letters and
+the unmarked Greek come from the `greek` package, whose functions are
+declared in HQL with no body and implemented in Rust. The articles come
+from the table in the Wikipedia card, read through `@[[wikipedia]]`.
+
+```hql
+import myth.beings
+import myth.wikipedia
+
+articles = wikipedia.articles(@[[wikipedia]].body.unwrap_or(""))
+
+gods
+| map(b => {
+    god: b.name,
+    greek: b.greek,
+    latin: b.latin(),
+    unmarked: b.plain(),
+    roman: b.roman.unwrap_or(""),
+    wikipedia: wikipedia.article(articles, b.id) | map(a => a.link()) | unwrap_or(""),
+  })
+| Table(columns = ["god", "greek", "latin", "unmarked", "roman", "wikipedia"])
+```
+<!-- hql:output hash=18cdd0a1ddff status=ok -->
+| god        | greek    | latin      | unmarked | roman   | wikipedia                                              |
+| ---------- | -------- | ---------- | -------- | ------- | ------------------------------------------------------ |
+| Hestia     | Ἑστία    | Hestia     | Εστια    | Vesta   | [Hestia](https://en.wikipedia.org/wiki/Hestia)         |
+| Demeter    | Δημήτηρ  | Dēmētēr    | Δημητηρ  | Ceres   | [Demeter](https://en.wikipedia.org/wiki/Demeter)       |
+| Hera       | Ἥρα      | Hēra       | Ηρα      | Juno    | [Hera](https://en.wikipedia.org/wiki/Hera)             |
+| Hades      | ᾍδης     | Haidēs     | Αδης     | Pluto   | [Hades](https://en.wikipedia.org/wiki/Hades)           |
+| Poseidon   | Ποσειδῶν | Poseidōn   | Ποσειδων | Neptune | [Poseidon](https://en.wikipedia.org/wiki/Poseidon)     |
+| Zeus       | Ζεύς     | Zeus       | Ζευς     | Jupiter | [Zeus](https://en.wikipedia.org/wiki/Zeus)             |
+| Athena     | Ἀθηνᾶ    | Athēna     | Αθηνα    | Minerva | [Athena](https://en.wikipedia.org/wiki/Athena)         |
+| Apollo     | Ἀπόλλων  | Apollōn    | Απολλων  | Apollo  | [Apollo](https://en.wikipedia.org/wiki/Apollo)         |
+| Artemis    | Ἄρτεμις  | Artemis    | Αρτεμις  | Diana   | [Artemis](https://en.wikipedia.org/wiki/Artemis)       |
+| Ares       | Ἄρης     | Arēs       | Αρης     | Mars    | [Ares](https://en.wikipedia.org/wiki/Ares)             |
+| Aphrodite  | Ἀφροδίτη | Aphroditē  | Αφροδιτη | Venus   | [Aphrodite](https://en.wikipedia.org/wiki/Aphrodite)   |
+| Hephaestus | Ἥφαιστος | Hēphaistos | Ηφαιστος | Vulcan  | [Hephaestus](https://en.wikipedia.org/wiki/Hephaestus) |
+| Hermes     | Ἑρμῆς    | Hermēs     | Ερμης    | Mercury | [Hermes](https://en.wikipedia.org/wiki/Hermes)         |
+| Dionysus   | Διόνυσος | Dionysos   | Διονυσος | Bacchus | [Dionysus](https://en.wikipedia.org/wiki/Dionysus)     |
+<!-- /hql:output -->
+
+## Family and domains
+
+The parents each god has in the first account the knowledge base holds,
+Hesiod's where Hesiod gives one. Where the sources disagree, as they do on
+Aphrodite and Hephaestus, [[theogony]] sets the accounts side by side.
+
+```hql
+import myth.kb
+import myth.beings
+from myth.genealogy import parents_of
+
+births = kb.parentage()
+
+gods
+| map(b => {god: b.name, parents: parents_of(births, b.id) | map(kb.name) | join(" and "), domains: b.domains | join(", ")})
+| Table(columns = ["god", "parents", "domains"])
+```
+<!-- hql:output hash=77b84509647b status=ok -->
+| god        | parents         | domains                                         |
+| ---------- | --------------- | ----------------------------------------------- |
+| Hestia     | Kronos and Rhea | hearth                                          |
+| Demeter    | Kronos and Rhea | grain, agriculture, the Mysteries               |
+| Hera       | Kronos and Rhea | marriage, queen of the gods                     |
+| Hades      | Kronos and Rhea | the underworld, the dead                        |
+| Poseidon   | Kronos and Rhea | sea, earthquakes, horses                        |
+| Zeus       | Kronos and Rhea | sky, thunder, kingship, hospitality             |
+| Athena     | Zeus and Metis  | wisdom, crafts, war strategy                    |
+| Apollo     | Zeus and Leto   | prophecy, music, healing, the bow               |
+| Artemis    | Zeus and Leto   | the hunt, wild animals, childbirth              |
+| Ares       | Zeus and Hera   | war                                             |
+| Aphrodite  | Uranus          | love, beauty, desire                            |
+| Hephaestus | Hera            | fire, metalwork, the forge                      |
+| Hermes     | Zeus and Maia   | messengers, travellers, thieves, guide of souls |
+| Dionysus   | Zeus and Semele | wine, ecstasy, theatre                          |
+<!-- /hql:output -->
+
+## The children of Zeus
+
+Every child any account gives Zeus: gods, the Muses and the Horae, and the
+mortal-born Dionysus, Perseus and Heracles.
+
+```hql
+import myth.kb
+import myth.beings
+from myth.genealogy import children_of
+
+children_of(kb.parentage(), "zeus")
+| map(id => kb.being(id))
+| somes
+| map(b => {child: b.name, kind: b.kind})
+| Table(columns = ["child", "kind"])
+```
+<!-- hql:output hash=cb8a6d1df60e status=ok -->
+| child      | kind     |
+| ---------- | -------- |
+| Athena     | olympian |
+| Horae      | deity    |
+| Moirai     | deity    |
+| Charites   | deity    |
+| Persephone | deity    |
+| Muses      | deity    |
+| Apollo     | olympian |
+| Artemis    | olympian |
+| Hebe       | deity    |
+| Ares       | olympian |
+| Eileithyia | deity    |
+| Hermes     | olympian |
+| Dionysus   | olympian |
+| Heracles   | hero     |
+| Hephaestus | olympian |
+| Aphrodite  | olympian |
+| Perseus    | hero     |
+<!-- /hql:output -->
+
+## Their myths
+
+How many of the myths in the knowledge base each god takes part in, and
+the first of them in the order the myths happen.
+
+```hql
+import myth.kb
+import myth.beings
+import myth.stories
+
+type Told { god : String, myths : Int, first : String }
+
+told = kb.myths()
+
+gods
+| map(b => Told(
+    god   = b.name,
+    myths = told | filter(m => m.features(b.id)) | size,
+    first = told | filter(m => m.features(b.id)) | first | map(m => m.title) | unwrap_or(""),
+  ))
+| sort(by = r => 0 - r.myths)
+| Table(columns = ["god", "myths", "first"])
+```
+<!-- hql:output hash=56056159df4d status=ok -->
+| god        | myths | first                                  |
+| ---------- | ----- | -------------------------------------- |
+| Zeus       | 21    | Kronos swallows his children           |
+| Hera       | 9     | Kronos swallows his children           |
+| Athena     | 9     | The war of the Giants                  |
+| Hephaestus | 5     | Pandora                                |
+| Hades      | 4     | Kronos swallows his children           |
+| Poseidon   | 4     | Kronos swallows his children           |
+| Apollo     | 4     | The birth of Apollo and Artemis        |
+| Hermes     | 4     | Hermes steals the cattle of Apollo     |
+| Demeter    | 2     | Kronos swallows his children           |
+| Artemis    | 2     | The birth of Apollo and Artemis        |
+| Ares       | 2     | Ares and Aphrodite in Hephaestus's net |
+| Aphrodite  | 2     | Kronos castrates Uranus                |
+| Dionysus   | 2     | The birth of Dionysus                  |
+| Hestia     | 1     | Kronos swallows his children           |
+<!-- /hql:output -->

@@ -1,0 +1,144 @@
+# Greek myth, as a knowledge base
+
+A compact knowledge base of Greek myth, from Chaos to Heracles among the
+gods: who is born of whom and according to whom, what happens and where it
+is told, and when each god is first attested. Every table below is an HQL
+cell that `hql render` runs.
+
+The knowledge base is HQL modules under `lib/myth/` with their records
+beside them. The Greek script is handled by the `greek` package, whose
+functions are declared in HQL without a body and implemented in Rust, in
+`packages/greek/`. The documents:
+
+- [[theogony]]: from Chaos to the rule of Zeus, in Hesiod's order, and where
+  the sources disagree
+- [[olympians]]: the gods of Olympus, their names, families, domains and
+  myths
+- [[heracles]]: the hero's descent from the first powers, his twelve
+  labours and his death
+- [[evidence]]: the gods on Linear B tablets, at sanctuaries and in texts
+- [[wikipedia]]: the knowledge base's ids mapped to two external
+  namespaces, Wikipedia's articles and Wikidata's items
+
+## What it holds
+
+```hql
+import myth.kb
+import myth.evidence
+
+[
+    {records: "beings", count: kb.beings() | size},
+    {records: "accounts of a birth", count: kb.parentage() | size},
+    {records: "myths", count: kb.myths() | size},
+    {records: "works cited", count: kb.works() | size},
+    {records: "Linear B attestations", count: evidence.tablets() | size},
+    {records: "sites", count: evidence.sites() | size},
+]
+| Table(columns = ["records", "count"])
+```
+<!-- hql:output hash=dfc7dc154668 status=ok -->
+| records               | count |
+| --------------------- | ----- |
+| beings                | 103   |
+| accounts of a birth   | 98    |
+| myths                 | 49    |
+| works cited           | 17    |
+| Linear B attestations | 14    |
+| sites                 | 17    |
+<!-- /hql:output -->
+
+## Kinds of being
+
+Each being has one kind. The primordial powers come into being first; the
+Titans are the children of Uranus and Gaia; the elder races, the Cyclopes,
+the Hundred-Handers, the Erinyes and the Giants, are born with them. Of the
+gods, the twelve of the Parthenon frieze are marked `olympian`.
+
+```hql
+import myth.kb
+
+type Kind { kind : String, count : Int, examples : String }
+
+kb.beings()
+| group(by = b => b.kind)
+| map(g => Kind(kind = g.key, count = g.items | size, examples = g.items | take(4) | map(b => b.name) | join(", ")))
+| sort(by = k => 0 - k.count)
+| Table(columns = ["kind", "count", "examples"])
+```
+<!-- hql:output hash=411fef2dc7aa status=ok -->
+| kind       | count | examples                                   |
+| ---------- | ----- | ------------------------------------------ |
+| deity      | 23    | Phorcys, Ceto, Callirhoe, Clymene          |
+| mortal     | 23    | Pandora, Deucalion, Pyrrha, Iasus          |
+| titan      | 16    | Oceanus, Coeus, Crius, Hyperion            |
+| olympian   | 12    | Demeter, Hera, Poseidon, Zeus              |
+| primordial | 10    | Chaos, Gaia, Tartarus, Eros                |
+| monster    | 10    | Typhon, Echidna, Orthus, Cerberus          |
+| hero       | 5     | Cadmus, Perseus, Heracles, Iolaus          |
+| elder      | 4     | Cyclopes, Hundred-Handers, Erinyes, Giants |
+<!-- /hql:output -->
+
+## The sources
+
+The works the knowledge base cites, oldest first. A date is the work's
+approximate date of composition; Homer and Hesiod are both placed around
+700 BCE, and which came first is not known.
+
+```hql
+import myth.kb
+
+kb.works()
+| sort(by = w => w.year)
+| map(w => {author: w.author, work: w.title, date: w.dating})
+| Table(columns = ["author", "work", "date"])
+```
+<!-- hql:output hash=51518ad0e80c status=ok -->
+| author             | work                  | date                                        |
+| ------------------ | --------------------- | ------------------------------------------- |
+| Homer              | Iliad                 | late 8th or early 7th century BCE           |
+| Homer              | Odyssey               | c. 700 BCE                                  |
+| Hesiod             | Theogony              | c. 700 BCE                                  |
+| Hesiod             | Works and Days        | c. 700 BCE                                  |
+| Homeric Hymns      | Hymn to Demeter (2)   | late 7th or 6th century BCE                 |
+| Homeric Hymns      | Hymn to Apollo (3)    | 7th–6th century BCE                         |
+| Homeric Hymns      | Hymn to Hermes (4)    | late 6th or early 5th century BCE           |
+| Pindar             | Nemean Odes           | Nemean 1, c. 476–469 BCE                    |
+| Pindar             | Olympian Odes         | Olympian 7, 464 BCE                         |
+| Aeschylus          | Prometheus Bound      | c. 460–430 BCE; the attribution is disputed |
+| Sophocles          | Women of Trachis      | c. 450–425 BCE                              |
+| Herodotus          | Histories             | c. 430 BCE                                  |
+| Euripides          | Heracles              | c. 416 BCE                                  |
+| Euripides          | Bacchae               | produced 405 BCE                            |
+| Ovid               | Metamorphoses         | completed c. 8 CE                           |
+| Pseudo-Apollodorus | Library               | 1st–2nd century CE                          |
+| Pausanias          | Description of Greece | c. 155–180 CE                               |
+<!-- /hql:output -->
+
+## This vault
+
+These documents are the cards of a HyperMarkdown vault, and a cell can
+query the vault itself: each card, the cards it links to and the cards
+that link to it.
+
+```hql
+cards
+| sort(by = c => c.name)
+| map(c => {
+    card: c.name,
+    title: c.title,
+    links_to: c | uplinks | map(e => e.target) | distinct | sort | join(", "),
+    linked_from: c | downlinks | map(e => e.source) | distinct | sort | join(", "),
+  })
+| Table(columns = ["card", "title", "links_to", "linked_from"])
+```
+<!-- hql:output hash=8fb7c078ce65 status=ok -->
+| card      | title                                         | links_to                                           | linked_from                |
+| --------- | --------------------------------------------- | -------------------------------------------------- | -------------------------- |
+| README    | Greek Gods: an HQL demo over a small ontology |                                                    |                            |
+| evidence  | The evidence                                  |                                                    | heracles, index            |
+| heracles  | Heracles                                      | evidence, wikipedia                                | index, wikipedia           |
+| index     | Greek myth, as a knowledge base               | evidence, heracles, olympians, theogony, wikipedia |                            |
+| olympians | The Olympians                                 | theogony, wikipedia                                | index, theogony, wikipedia |
+| theogony  | From Chaos to Zeus                            | olympians                                          | index, olympians           |
+| wikipedia | Wikipedia                                     | heracles, olympians                                | heracles, index, olympians |
+<!-- /hql:output -->

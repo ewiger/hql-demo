@@ -1,0 +1,14 @@
+{"domains":["hearth"],"greek":"Ἑστία","latin":"Hestia","name":"Hestia","parents":["Kronos","Rhea"],"plain":"Εστια","roman":"Vesta"}
+{"domains":["grain","agriculture","the Mysteries"],"greek":"Δημήτηρ","latin":"Dēmētēr","name":"Demeter","parents":["Kronos","Rhea"],"plain":"Δημητηρ","roman":"Ceres"}
+{"domains":["marriage","queen of the gods"],"greek":"Ἥρα","latin":"Hēra","name":"Hera","parents":["Kronos","Rhea"],"plain":"Ηρα","roman":"Juno"}
+{"domains":["the underworld","the dead"],"greek":"ᾍδης","latin":"Haidēs","name":"Hades","parents":["Kronos","Rhea"],"plain":"Αδης","roman":"Pluto"}
+{"domains":["sea","earthquakes","horses"],"greek":"Ποσειδῶν","latin":"Poseidōn","name":"Poseidon","parents":["Kronos","Rhea"],"plain":"Ποσειδων","roman":"Neptune"}
+{"domains":["sky","thunder","kingship","hospitality"],"greek":"Ζεύς","latin":"Zeus","name":"Zeus","parents":["Kronos","Rhea"],"plain":"Ζευς","roman":"Jupiter"}
+{"domains":["wisdom","crafts","war strategy"],"greek":"Ἀθηνᾶ","latin":"Athēna","name":"Athena","parents":["Zeus","Metis"],"plain":"Αθηνα","roman":"Minerva"}
+{"domains":["prophecy","music","healing","the bow"],"greek":"Ἀπόλλων","latin":"Apollōn","name":"Apollo","parents":["Zeus","Leto"],"plain":"Απολλων","roman":"Apollo"}
+{"domains":["the hunt","wild animals","childbirth"],"greek":"Ἄρτεμις","latin":"Artemis","name":"Artemis","parents":["Zeus","Leto"],"plain":"Αρτεμις","roman":"Diana"}
+{"domains":["war"],"greek":"Ἄρης","latin":"Arēs","name":"Ares","parents":["Zeus","Hera"],"plain":"Αρης","roman":"Mars"}
+{"domains":["love","beauty","desire"],"greek":"Ἀφροδίτη","latin":"Aphroditē","name":"Aphrodite","parents":["Uranus"],"plain":"Αφροδιτη","roman":"Venus"}
+{"domains":["fire","metalwork","the forge"],"greek":"Ἥφαιστος","latin":"Hēphaistos","name":"Hephaestus","parents":["Hera"],"plain":"Ηφαιστος","roman":"Vulcan"}
+{"domains":["messengers","travellers","thieves","guide of souls"],"greek":"Ἑρμῆς","latin":"Hermēs","name":"Hermes","parents":["Zeus","Maia"],"plain":"Ερμης","roman":"Mercury"}
+{"domains":["wine","ecstasy","theatre"],"greek":"Διόνυσος","latin":"Dionysos","name":"Dionysus","parents":["Zeus","Semele"],"plain":"Διονυσος","roman":"Bacchus"}

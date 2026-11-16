@@ -1,0 +1,103 @@
+{"id": "chaos", "name": "Chaos", "greek": "Χάος", "kind": "primordial", "domains": ["the gap", "void"], "note": "the first to come into being, Th. 116"}
+{"id": "gaia", "name": "Gaia", "greek": "Γαῖα", "roman": "Tellus", "kind": "primordial", "domains": ["earth"]}
+{"id": "tartarus", "name": "Tartarus", "greek": "Τάρταρος", "kind": "primordial", "domains": ["the pit beneath the earth"]}
+{"id": "eros", "name": "Eros", "greek": "Ἔρως", "roman": "Cupid", "kind": "primordial", "domains": ["desire"], "note": "primordial in Hesiod; later a son of Aphrodite"}
+{"id": "erebus", "name": "Erebus", "greek": "Ἔρεβος", "kind": "primordial", "domains": ["darkness"]}
+{"id": "nyx", "name": "Nyx", "greek": "Νύξ", "roman": "Nox", "kind": "primordial", "domains": ["night"]}
+{"id": "aether", "name": "Aether", "greek": "Αἰθήρ", "kind": "primordial", "domains": ["bright upper air"]}
+{"id": "hemera", "name": "Hemera", "greek": "Ἡμέρα", "roman": "Dies", "kind": "primordial", "domains": ["day"]}
+{"id": "uranus", "name": "Uranus", "greek": "Οὐρανός", "roman": "Caelus", "kind": "primordial", "domains": ["sky"]}
+{"id": "pontus", "name": "Pontus", "greek": "Πόντος", "kind": "primordial", "domains": ["sea"]}
+{"id": "oceanus", "name": "Oceanus", "greek": "Ὠκεανός", "kind": "titan", "domains": ["the world-river"]}
+{"id": "coeus", "name": "Coeus", "greek": "Κοῖος", "kind": "titan", "domains": []}
+{"id": "crius", "name": "Crius", "greek": "Κρεῖος", "kind": "titan", "domains": []}
+{"id": "hyperion", "name": "Hyperion", "greek": "Ὑπερίων", "kind": "titan", "domains": ["light"]}
+{"id": "iapetus", "name": "Iapetus", "greek": "Ἰαπετός", "kind": "titan", "domains": []}
+{"id": "theia", "name": "Theia", "greek": "Θεία", "kind": "titan", "domains": ["sight", "brilliance"]}
+{"id": "rhea", "name": "Rhea", "greek": "Ῥέα", "roman": "Ops", "kind": "titan", "domains": ["mother of the gods"]}
+{"id": "themis", "name": "Themis", "greek": "Θέμις", "kind": "titan", "domains": ["divine law", "order"]}
+{"id": "mnemosyne", "name": "Mnemosyne", "greek": "Μνημοσύνη", "kind": "titan", "domains": ["memory"]}
+{"id": "phoebe", "name": "Phoebe", "greek": "Φοίβη", "kind": "titan", "domains": []}
+{"id": "tethys", "name": "Tethys", "greek": "Τηθύς", "kind": "titan", "domains": ["fresh water"]}
+{"id": "kronos", "name": "Kronos", "greek": "Κρόνος", "roman": "Saturn", "kind": "titan", "domains": ["kingship before Zeus"]}
+{"id": "cyclopes", "name": "Cyclopes", "greek": "Κύκλωπες", "kind": "elder", "domains": ["thunder", "lightning"], "note": "Brontes, Steropes and Arges, Th. 139–146"}
+{"id": "hecatoncheires", "name": "Hundred-Handers", "greek": "Ἑκατόγχειρες", "kind": "elder", "domains": ["strength"], "note": "Cottus, Briareus and Gyges, Th. 147–153"}
+{"id": "erinyes", "name": "Erinyes", "greek": "Ἐρινύες", "roman": "Furies", "kind": "elder", "domains": ["vengeance"]}
+{"id": "giants", "name": "Giants", "greek": "Γίγαντες", "kind": "elder", "domains": []}
+{"id": "phorcys", "name": "Phorcys", "greek": "Φόρκυς", "kind": "deity", "domains": ["the sea's dangers"]}
+{"id": "ceto", "name": "Ceto", "greek": "Κητώ", "kind": "deity", "domains": ["sea monsters"]}
+{"id": "callirhoe", "name": "Callirhoe", "greek": "Καλλιρρόη", "kind": "deity", "domains": [], "note": "an Oceanid"}
+{"id": "clymene", "name": "Clymene", "greek": "Κλυμένη", "kind": "deity", "domains": [], "note": "an Oceanid"}
+{"id": "metis", "name": "Metis", "greek": "Μῆτις", "kind": "deity", "domains": ["cunning intelligence"], "note": "an Oceanid; the first wife of Zeus"}
+{"id": "dione", "name": "Dione", "greek": "Διώνη", "kind": "deity", "domains": [], "note": "an Oceanid in Hesiod"}
+{"id": "eurynome", "name": "Eurynome", "greek": "Εὐρυνόμη", "kind": "deity", "domains": [], "note": "an Oceanid"}
+{"id": "helios", "name": "Helios", "greek": "Ἥλιος", "roman": "Sol", "kind": "deity", "domains": ["sun"]}
+{"id": "selene", "name": "Selene", "greek": "Σελήνη", "roman": "Luna", "kind": "deity", "domains": ["moon"]}
+{"id": "eos", "name": "Eos", "greek": "Ἠώς", "roman": "Aurora", "kind": "deity", "domains": ["dawn"]}
+{"id": "leto", "name": "Leto", "greek": "Λητώ", "roman": "Latona", "kind": "deity", "domains": ["motherhood"]}
+{"id": "atlas", "name": "Atlas", "greek": "Ἄτλας", "kind": "titan", "domains": ["bearing the sky"]}
+{"id": "menoetius", "name": "Menoetius", "greek": "Μενοίτιος", "kind": "titan", "domains": []}
+{"id": "prometheus", "name": "Prometheus", "greek": "Προμηθεύς", "kind": "titan", "domains": ["forethought", "fire"]}
+{"id": "epimetheus", "name": "Epimetheus", "greek": "Ἐπιμηθεύς", "kind": "titan", "domains": ["afterthought"]}
+{"id": "maia", "name": "Maia", "greek": "Μαῖα", "kind": "deity", "domains": [], "note": "a daughter of Atlas, one of the Pleiades"}
+{"id": "hestia", "name": "Hestia", "greek": "Ἑστία", "roman": "Vesta", "kind": "deity", "domains": ["hearth"], "note": "firstborn of Kronos and Rhea; not among the twelve of the Parthenon frieze"}
+{"id": "demeter", "name": "Demeter", "greek": "Δημήτηρ", "roman": "Ceres", "kind": "olympian", "domains": ["grain", "agriculture", "the Mysteries"]}
+{"id": "hera", "name": "Hera", "greek": "Ἥρα", "roman": "Juno", "kind": "olympian", "domains": ["marriage", "queen of the gods"]}
+{"id": "hades", "name": "Hades", "greek": "ᾍδης", "roman": "Pluto", "kind": "deity", "domains": ["the underworld", "the dead"], "note": "dwells below, not on Olympus"}
+{"id": "poseidon", "name": "Poseidon", "greek": "Ποσειδῶν", "roman": "Neptune", "kind": "olympian", "domains": ["sea", "earthquakes", "horses"]}
+{"id": "zeus", "name": "Zeus", "greek": "Ζεύς", "roman": "Jupiter", "kind": "olympian", "domains": ["sky", "thunder", "kingship", "hospitality"]}
+{"id": "athena", "name": "Athena", "greek": "Ἀθηνᾶ", "roman": "Minerva", "kind": "olympian", "domains": ["wisdom", "crafts", "war strategy"]}
+{"id": "apollo", "name": "Apollo", "greek": "Ἀπόλλων", "roman": "Apollo", "kind": "olympian", "domains": ["prophecy", "music", "healing", "the bow"]}
+{"id": "artemis", "name": "Artemis", "greek": "Ἄρτεμις", "roman": "Diana", "kind": "olympian", "domains": ["the hunt", "wild animals", "childbirth"]}
+{"id": "ares", "name": "Ares", "greek": "Ἄρης", "roman": "Mars", "kind": "olympian", "domains": ["war"]}
+{"id": "aphrodite", "name": "Aphrodite", "greek": "Ἀφροδίτη", "roman": "Venus", "kind": "olympian", "domains": ["love", "beauty", "desire"]}
+{"id": "hephaestus", "name": "Hephaestus", "greek": "Ἥφαιστος", "roman": "Vulcan", "kind": "olympian", "domains": ["fire", "metalwork", "the forge"]}
+{"id": "hermes", "name": "Hermes", "greek": "Ἑρμῆς", "roman": "Mercury", "kind": "olympian", "domains": ["messengers", "travellers", "thieves", "guide of souls"]}
+{"id": "dionysus", "name": "Dionysus", "greek": "Διόνυσος", "roman": "Bacchus", "kind": "olympian", "domains": ["wine", "ecstasy", "theatre"]}
+{"id": "persephone", "name": "Persephone", "greek": "Περσεφόνη", "roman": "Proserpina", "kind": "deity", "domains": ["the underworld", "spring"]}
+{"id": "hebe", "name": "Hebe", "greek": "Ἥβη", "roman": "Juventas", "kind": "deity", "domains": ["youth"]}
+{"id": "eileithyia", "name": "Eileithyia", "greek": "Εἰλείθυια", "kind": "deity", "domains": ["childbirth"]}
+{"id": "muses", "name": "Muses", "greek": "Μοῦσαι", "kind": "deity", "domains": ["poetry", "the arts"], "note": "nine, named at Th. 77–79"}
+{"id": "horae", "name": "Horae", "greek": "Ὧραι", "kind": "deity", "domains": ["the seasons", "order"]}
+{"id": "moirai", "name": "Moirai", "greek": "Μοῖραι", "roman": "Parcae", "kind": "deity", "domains": ["fate"], "note": "Clotho, Lachesis and Atropos"}
+{"id": "charites", "name": "Charites", "greek": "Χάριτες", "roman": "Gratiae", "kind": "deity", "domains": ["grace"]}
+{"id": "harmonia", "name": "Harmonia", "greek": "Ἁρμονία", "kind": "deity", "domains": ["concord"]}
+{"id": "typhon", "name": "Typhon", "greek": "Τυφῶν", "kind": "monster", "domains": [], "note": "Typhoeus in Hesiod"}
+{"id": "echidna", "name": "Echidna", "greek": "Ἔχιδνα", "kind": "monster", "domains": [], "note": "her parentage at Th. 295–297 is ambiguous"}
+{"id": "orthus", "name": "Orthus", "greek": "Ὄρθος", "kind": "monster", "domains": [], "note": "the two-headed dog of Geryon"}
+{"id": "cerberus", "name": "Cerberus", "greek": "Κέρβερος", "kind": "monster", "domains": ["guarding the dead"]}
+{"id": "hydra", "name": "Lernaean Hydra", "greek": "Ὕδρα", "kind": "monster", "domains": []}
+{"id": "nemean-lion", "name": "Nemean Lion", "greek": "Νεμεαῖος λέων", "kind": "monster", "domains": []}
+{"id": "medusa", "name": "Medusa", "greek": "Μέδουσα", "kind": "monster", "domains": [], "note": "the one mortal Gorgon, Th. 276–277"}
+{"id": "pegasus", "name": "Pegasus", "greek": "Πήγασος", "kind": "monster", "domains": [], "note": "the winged horse"}
+{"id": "chrysaor", "name": "Chrysaor", "greek": "Χρυσάωρ", "kind": "monster", "domains": []}
+{"id": "geryon", "name": "Geryon", "greek": "Γηρυόνης", "kind": "monster", "domains": [], "note": "three-headed in Hesiod, Th. 287"}
+{"id": "pandora", "name": "Pandora", "greek": "Πανδώρα", "kind": "mortal", "domains": [], "note": "the first woman, made by Hephaestus at Zeus's order"}
+{"id": "deucalion", "name": "Deucalion", "greek": "Δευκαλίων", "kind": "mortal", "domains": [], "note": "survivor of the flood"}
+{"id": "pyrrha", "name": "Pyrrha", "greek": "Πύρρα", "kind": "mortal", "domains": []}
+{"id": "inachus", "name": "Inachus", "greek": "Ἴναχος", "kind": "deity", "domains": [], "note": "the river of Argos and its first king"}
+{"id": "iasus", "name": "Iasus", "greek": "Ἴασος", "kind": "mortal", "domains": [], "note": "a king of Argos, son of Argus"}
+{"id": "io", "name": "Io", "greek": "Ἰώ", "kind": "mortal", "domains": [], "note": "priestess of Hera at Argos"}
+{"id": "phoenix", "name": "Phoenix", "greek": "Φοῖνιξ", "kind": "mortal", "domains": []}
+{"id": "agenor", "name": "Agenor", "greek": "Ἀγήνωρ", "kind": "mortal", "domains": [], "note": "king of Tyre or Sidon"}
+{"id": "europa", "name": "Europa", "greek": "Εὐρώπη", "kind": "mortal", "domains": []}
+{"id": "cadmus", "name": "Cadmus", "greek": "Κάδμος", "kind": "hero", "domains": [], "note": "founder of Thebes"}
+{"id": "semele", "name": "Semele", "greek": "Σεμέλη", "kind": "mortal", "domains": []}
+{"id": "acrisius", "name": "Acrisius", "greek": "Ἀκρίσιος", "kind": "mortal", "domains": [], "note": "king of Argos"}
+{"id": "danae", "name": "Danaë", "greek": "Δανάη", "kind": "mortal", "domains": []}
+{"id": "perseus", "name": "Perseus", "greek": "Περσεύς", "kind": "hero", "domains": [], "note": "founder of Mycenae, Pausanias 2.16.3"}
+{"id": "cepheus", "name": "Cepheus", "greek": "Κηφεύς", "kind": "mortal", "domains": [], "note": "king of Ethiopia"}
+{"id": "cassiopeia", "name": "Cassiopeia", "greek": "Κασσιέπεια", "kind": "mortal", "domains": []}
+{"id": "andromeda", "name": "Andromeda", "greek": "Ἀνδρομέδα", "kind": "mortal", "domains": []}
+{"id": "alcaeus", "name": "Alcaeus", "greek": "Ἀλκαῖος", "kind": "mortal", "domains": []}
+{"id": "electryon", "name": "Electryon", "greek": "Ἠλεκτρύων", "kind": "mortal", "domains": [], "note": "king of Mycenae"}
+{"id": "sthenelus", "name": "Sthenelus", "greek": "Σθένελος", "kind": "mortal", "domains": []}
+{"id": "amphitryon", "name": "Amphitryon", "greek": "Ἀμφιτρύων", "kind": "mortal", "domains": []}
+{"id": "alcmene", "name": "Alcmene", "greek": "Ἀλκμήνη", "kind": "mortal", "domains": []}
+{"id": "eurystheus", "name": "Eurystheus", "greek": "Εὐρυσθεύς", "kind": "mortal", "domains": [], "note": "king of Tiryns and Mycenae, who set the labours"}
+{"id": "heracles", "name": "Heracles", "greek": "Ἡρακλῆς", "roman": "Hercules", "kind": "hero", "domains": ["strength", "averting evil"], "note": "made a god at his death"}
+{"id": "iphicles", "name": "Iphicles", "greek": "Ἰφικλῆς", "kind": "mortal", "domains": [], "note": "twin of Heracles, by Amphitryon"}
+{"id": "iolaus", "name": "Iolaus", "greek": "Ἰόλαος", "kind": "hero", "domains": [], "note": "son of Iphicles; companion of Heracles"}
+{"id": "oeneus", "name": "Oeneus", "greek": "Οἰνεύς", "kind": "mortal", "domains": [], "note": "king of Calydon"}
+{"id": "deianira", "name": "Deianira", "greek": "Δηιάνειρα", "kind": "mortal", "domains": []}
+{"id": "hyllus", "name": "Hyllus", "greek": "Ὕλλος", "kind": "hero", "domains": []}

@@ -9,7 +9,7 @@
 // as. The address is still named by an environment variable: a constructor
 // takes no secret.
 
-import io.msg.nats_jetstream
+from io.msg.nats_jetstream import nats_jetstream
 
 orders = nats_jetstream("events.orders", stream = "EVENTS", url_env = "NATS_URL", idle_ms = 2000)
 

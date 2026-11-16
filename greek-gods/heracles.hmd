@@ -1,0 +1,129 @@
+# Heracles
+
+Heracles is the son of Zeus and the mortal Alcmene, a granddaughter of
+Perseus. Hera hated him from before his birth: she delayed Alcmene's
+labour so that his cousin Eurystheus would be born first and rule over
+him. At Eurystheus's command he performed the labours, and at his death he
+was made a god and married Hera's daughter Hebe.
+
+## His ancestors
+
+Every ancestor the first account of each birth names, nearest first, each
+once. Through Zeus the line reaches Kronos and Rhea, then Uranus and Gaia,
+who in Hesiod comes into being after Chaos and is born of no one. Through
+Alcmene it reaches her grandfather Perseus, whose father is Zeus again.
+The Greek names are put into Latin letters by the `greek` package, and
+each ancestor links to its article in [[wikipedia]].
+
+```hql
+import myth.kb
+import myth.beings
+import myth.genealogy as family
+import myth.wikipedia
+
+articles = wikipedia.articles(@[[wikipedia]].body.unwrap_or(""))
+
+family.lineage(kb.parentage(), "heracles")
+| map(a => kb.being(a.being) | map(b => {
+    generation: a.generation,
+    name: b.name,
+    greek: b.greek,
+    latin: b.latin(),
+    kind: b.kind,
+    wikipedia: wikipedia.article(articles, b.id) | map(w => w.link()) | unwrap_or(""),
+  }))
+| somes
+| Table(columns = ["generation", "name", "greek", "latin", "kind", "wikipedia"])
+```
+<!-- hql:output hash=d9c3c6feb48f status=ok -->
+| generation | name       | greek      | latin      | kind       | wikipedia                                                                                          |
+| ---------- | ---------- | ---------- | ---------- | ---------- | -------------------------------------------------------------------------------------------------- |
+| 1          | Zeus       | Ζεύς       | Zeus       | olympian   | [Zeus](https://en.wikipedia.org/wiki/Zeus)                                                         |
+| 1          | Alcmene    | Ἀλκμήνη    | Alkmēnē    | mortal     | [Alcmene](https://en.wikipedia.org/wiki/Alcmene)                                                   |
+| 2          | Kronos     | Κρόνος     | Kronos     | titan      | [Cronus](https://en.wikipedia.org/wiki/Cronus)                                                     |
+| 2          | Rhea       | Ῥέα        | Rhea       | titan      | [Rhea (mythology)](https://en.wikipedia.org/wiki/Rhea_(mythology))                                 |
+| 2          | Electryon  | Ἠλεκτρύων  | Ēlektryōn  | mortal     | [Electryon](https://en.wikipedia.org/wiki/Electryon)                                               |
+| 3          | Uranus     | Οὐρανός    | Ouranos    | primordial | [Uranus (mythology)](https://en.wikipedia.org/wiki/Uranus_(mythology))                             |
+| 3          | Gaia       | Γαῖα       | Gaia       | primordial | [Gaia](https://en.wikipedia.org/wiki/Gaia)                                                         |
+| 3          | Perseus    | Περσεύς    | Perseus    | hero       | [Perseus](https://en.wikipedia.org/wiki/Perseus)                                                   |
+| 3          | Andromeda  | Ἀνδρομέδα  | Andromeda  | mortal     | [Andromeda (mythology)](https://en.wikipedia.org/wiki/Andromeda_(mythology))                       |
+| 4          | Danaë      | Δανάη      | Danaē      | mortal     | [Danaë](https://en.wikipedia.org/wiki/Dana%C3%AB)                                                  |
+| 4          | Cepheus    | Κηφεύς     | Kēpheus    | mortal     | [Cepheus (father of Andromeda)](https://en.wikipedia.org/wiki/Cepheus_(father_of_Andromeda))       |
+| 4          | Cassiopeia | Κασσιέπεια | Kassiepeia | mortal     | [Cassiopeia (mother of Andromeda)](https://en.wikipedia.org/wiki/Cassiopeia_(mother_of_Andromeda)) |
+| 5          | Acrisius   | Ἀκρίσιος   | Akrisios   | mortal     | [Acrisius](https://en.wikipedia.org/wiki/Acrisius)                                                 |
+<!-- /hql:output -->
+
+## His life
+
+The myths of his life, from his birth to his apotheosis, with where each
+is told. He also takes part in two myths of the gods: the war of the
+Giants, which the gods can win only with a mortal's help, and the freeing
+of Prometheus, on the way to the Hesperides.
+
+```hql id=life hidden
+import myth.kb
+import myth.stories
+
+kb.myths() | filter(m => m.features("heracles"))
+```
+
+```hql
+import myth.kb
+import myth.stories
+
+works = kb.works()
+
+born = life | find(m => m.id == "heracles-birth") | map(m => m.seq) | unwrap_or(0)
+
+life
+| filter(m => m.seq >= born and not m.id.starts_with("labour-"))
+| map(m => {myth: m.title, story: m.summary, told: m.sources(works) | join("; ")})
+| Table(columns = ["myth", "story", "told"])
+```
+<!-- hql:output hash=cf4875726779 status=ok -->
+| myth                                       | story                                                                                                                                                                                                                                    | told                                                                                   |
+| ------------------------------------------ | ---------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- | -------------------------------------------------------------------------------------- |
+| The birth of Heracles                      | Zeus swears that the descendant of his born that day will rule; Hera delays Alcmene's labour so that Eurystheus is born first.                                                                                                           | Homer, Iliad 19.95–133; Pseudo-Apollodorus, Library 2.4.8; Hesiod, Theogony 943–944    |
+| The infant Heracles strangles the serpents | Hera sends two serpents to the cradle; the infant Heracles strangles them.                                                                                                                                                               | Pindar, Nemean Odes 1.33–72; Pseudo-Apollodorus, Library 2.4.8                         |
+| The madness of Heracles                    | Driven mad by Hera, Heracles kills his children by Megara. In Apollodorus the Pythia then sends him to serve Eurystheus for twelve years and perform ten labours; in Euripides the madness comes after the labours, and Megara dies too. | Euripides, Heracles 822–1015; Pseudo-Apollodorus, Library 2.4.12                       |
+| The death of Heracles                      | Deianira sends a robe smeared with the centaur Nessus's poisoned blood, thinking it a love charm; in agony Heracles has himself burned on a pyre on Oeta.                                                                                | Sophocles, Women of Trachis 531–1278; Pseudo-Apollodorus, Library 2.7.7                |
+| Heracles among the gods                    | Made immortal, Heracles is reconciled with Hera and marries Hebe; Odysseus sees only his image among the dead.                                                                                                                           | Hesiod, Theogony 950–955; Homer, Odyssey 11.601–604; Pseudo-Apollodorus, Library 2.7.7 |
+<!-- /hql:output -->
+
+## The twelve labours
+
+In Pseudo-Apollodorus's order, numbered as a Greek would number them, in
+alphabetic numerals: `12.numeral()` is `ιβʹ`, by the `greek` package.
+Apollodorus says Eurystheus first set ten, and refused to count the hydra,
+because Iolaus helped, and the stables, because Augeas promised payment.
+The metopes of the Temple of Zeus at Olympia, about 460 BCE, are the
+earliest known set of twelve ([[evidence]]).
+
+```hql
+import greek
+import myth.kb
+import myth.stories
+
+life
+| filter(m => m.id.starts_with("labour-"))
+| sort(by = m => m.seq)
+| enumerate
+| map(p => {number: (p.first + 1).numeral(), labour: p.second.title, place: p.second.place.unwrap_or(""), story: p.second.summary})
+| Table(columns = ["number", "labour", "place", "story"])
+```
+<!-- hql:output hash=a1a121f7a3ee status=ok -->
+| number | labour                       | place          | story                                                                                                                                                    |
+| ------ | ---------------------------- | -------------- | -------------------------------------------------------------------------------------------------------------------------------------------------------- |
+| αʹ     | The Nemean lion              | Nemea          | The lion, born of Typhon, cannot be wounded, so Heracles chokes it and carries it to Mycenae.                                                            |
+| βʹ     | The Lernaean hydra           | Lerna          | Iolaus sears each neck as Heracles cuts off a head; Eurystheus does not count the labour because Heracles had help.                                      |
+| γʹ     | The Ceryneian hind           | Ceryneia       | Heracles hunts the golden-horned hind, sacred to Artemis, for a whole year.                                                                              |
+| δʹ     | The Erymanthian boar         | Erymanthus     | Heracles drives the boar into deep snow and brings it back alive.                                                                                        |
+| εʹ     | The stables of Augeas        | Elis           | Heracles cleans the stables in one day by turning the Alpheus and the Peneus through them; Eurystheus does not count it because Augeas promised payment. |
+| ϛʹ     | The Stymphalian birds        | Stymphalus     | Heracles scares the birds from their marsh with bronze clappers made by Hephaestus and given by Athena, then shoots them.                                |
+| ζʹ     | The Cretan bull              | Crete          | Heracles brings the bull of Minos to Eurystheus, who lets it go; it roams to Marathon.                                                                   |
+| ηʹ     | The mares of Diomedes        | Thrace         | Heracles takes the man-eating mares of the Thracian king Diomedes.                                                                                       |
+| θʹ     | The belt of Hippolyte        | Themiscyra     | Heracles fetches the belt of the Amazon queen for Eurystheus's daughter Admete.                                                                          |
+| ιʹ     | The cattle of Geryon         | Erytheia       | Heracles crosses the Ocean in the cup of Helios, sets up the Pillars at the strait, kills Orthus and Geryon and drives the cattle to Greece.             |
+| ιαʹ    | The apples of the Hesperides | the Hesperides | On the way Heracles frees Prometheus; in one account he takes the sky from Atlas while Atlas fetches the apples.                                         |
+| ιβʹ    | Cerberus                     | the underworld | With Hades's leave and without weapons, Heracles brings Cerberus up from the underworld and shows him to Eurystheus.                                     |
+<!-- /hql:output -->

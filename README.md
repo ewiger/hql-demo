@@ -3,7 +3,7 @@
 Use cases for [HQL](https://github.com/ewiger/hql) against real systems, each
 in its own folder with the Docker Compose file that starts what it needs. A
 folder is an HQL project: its `.hql/config.toml` configures the endpoints its programs
-read and write by id, and its `run.sh` runs the case end to end and compares
+read and write by id, or the module root its programs import from, and its `run.sh` runs the case end to end and compares
 the output with `expected/`.
 
 | Folder | Services | What the programs do |
@@ -17,10 +17,13 @@ the output with `expected/`.
 | [`nats-lakehouse/`](nats-lakehouse/) | all of the above | Raw messages on a subject routed into a silver Delta table or a dead-letter subject, then the silver table totalled into a gold Delta table |
 | [`ledger/`](ledger/) | PostgreSQL 17 | Two accounts and a transfers table; a transfer of 100 as one transaction, twice committed and once rolled back on the sender's balance, then the ledger read back |
 | [`crypto/`](crypto/) | none | A release folder listed into a manifest of SHA-256 digests, the manifest signed with an Ed25519 key, the folder, an altered copy and a forged manifest verified against it, and webhook deliveries kept one per body by fingerprint |
+| [`greek-gods/`](greek-gods/) | none | A knowledge base of Greek myth from Chaos to Heracles, kept as the project's own HQL modules; a vault of documents whose HQL cells query it; and a Rust extension, built by hql from a local crate, that writes Greek in Latin letters, in alphabetic numerals and in Linear B |
 
 ## Running
 
-The cases work with **hql 0.6.0**.
+The cases work with **hql `main` after 0.7.0**. They use the `from` import
+statement of [HQL-0060](https://github.com/ewiger/hql/blob/main/doc/proposals/HQL-0060/index.hmd),
+which 0.7.0 does not have.
 
 You need Docker with Compose, and an `hql` binary built from the sibling
 `hql` repository (`cargo build` there) or on the `PATH`; set `HQL` to use
@@ -136,11 +139,11 @@ Core NATS keeps nothing, so a reader must be subscribed before a writer
 publishes. [`nats-core/run.sh`](nats-core/run.sh) starts
 [`subscribe.hql`](nats-core/subscribe.hql) in the background on the
 wildcard `orders.>`, then runs [`publish.hql`](nats-core/publish.hql), which
-sends each event to `orders.<kind>` through the constructor of
-`io.msg.nats`:
+sends each event to `orders.<kind>` through the function `nats` of the
+module `io.msg.nats`, which `from` binds by its own name:
 
 ```hql
-import io.msg.nats
+from io.msg.nats import nats
 
 subject = (kind: String) => nats("orders." + kind, url_env = "NATS_URL")
 for_kind("order_placed") | sink(subject("order_placed"))
@@ -179,7 +182,7 @@ module `io.msg.nats_jetstream`, whose constructor takes the kind's keys.
 no endpoint in `.hql/config.toml`:
 
 ```hql
-import io.msg.nats_jetstream
+from io.msg.nats_jetstream import nats_jetstream
 
 orders = nats_jetstream("events.orders", stream = "EVENTS", url_env = "NATS_URL", idle_ms = 2000)
 tap(orders) | filter(e => e.kind == "order_placed")
@@ -340,6 +343,79 @@ twice arrives with its keys in another order or with `42.00` for `42`, and
 the fingerprint of a `Data` tree, the SHA-256 of its canonical JSON, is the
 same for both: grouped by it, the first delivery of each body is kept, with
 its number of copies and its fingerprint in hex and in base64.
+
+## Greek myth: modules, a vault and an extension
+
+The `greek-gods/` case needs no service. It is a compact knowledge base of
+Greek myth, from Chaos to Heracles among the gods, sourced line by line:
+103 beings with their Greek names, 98 accounts of a birth each with the
+work and passage that gives it, 49 myths in the order they happen, 17
+ancient works with their dates, 14 names of gods on Linear B tablets and
+17 sanctuaries. Its own [README](greek-gods/README.md) is the technical
+guide: the ontology, the Rust module and how to change either. The case is
+three things at once, each the way HQL means it to be used:
+
+```text
+greek-gods/
+├── .hql/config.toml     the project: [modules] roots = ["lib"], [packages] paths = ["packages/greek"]
+├── .hmd/config.toml     the vault: its cards are the documents beside it
+├── lib/myth/            the knowledge base, HQL modules with their records in records/
+├── packages/greek/      the crate of the package `greek`: a contract without bodies, and Rust
+├── *.hmd                the documents, whose cells query lib/myth/ and call `greek`
+└── queries/             programs over the same modules
+```
+
+**The library.** [`lib/myth/`](greek-gods/lib/myth/) is a module root.
+Each record type is a receiver module over a type of its own: `myth.beings
+for Being`, `myth.genealogy for Parentage`, `myth.stories for Myth`.
+[`myth.kb`](greek-gods/lib/myth/kb.hql) reads the records beside it, since
+a relative path written in a module is read against the module's directory,
+so a program or a document anywhere calls `kb.beings()`. The trait
+`Evidence` of [`myth`](greek-gods/lib/myth/mod.hql) declares four functions
+with no body, and three modules implement it, `module myth.tablets for
+Tablet : Evidence` and the same for sites and the passages of texts;
+`Witness`, the trait's named type, holds all three in one list.
+
+**The extension.** [`packages/greek/`](greek-gods/packages/greek/) is the crate
+`hql-ext-greek`. Its contract,
+[`modules/greek/mod.hql`](greek-gods/packages/greek/modules/greek/mod.hql), declares
+four functions without a body, and [`src/lib.rs`](greek-gods/packages/greek/src/lib.rs)
+implements them:
+
+| Function | Gives |
+| --- | --- |
+| `"Ἡρακλῆς".transliterate()` | `Hēraklēs` |
+| `"Ζεύς".unaccented()` | `Ζευς` |
+| `12.numeral()` | `ιβʹ` |
+| `"di-wo-nu-so".linear_b()` | `𐀇𐀺𐀝𐀰` |
+
+`[packages] paths = ["packages/greek"]` lists the crate, and the first run builds it
+with cargo against the running hql, about a minute; a change to its sources
+rebuilds it on the next run. The library imports `greek` as it would any
+module: `fn latin(self) : String = self.greek.transliterate()` in
+`myth.beings`, and `fn glyphs(self) : String = self.form.linear_b()` in
+`myth.tablets`.
+
+**The vault.** The documents are the cards of a HyperMarkdown vault, and
+each of their `hql` cells keeps its output below it, written by `hql render
+--emit after --in-place`:
+
+| Document | What its cells compute |
+| --- | --- |
+| [`index.hmd`](greek-gods/index.hmd) | what the knowledge base holds, its kinds of being, its sources by date, and the vault's own cards and links |
+| [`theogony.hmd`](greek-gods/theogony.hmd) | every birth in Hesiod's *Theogony* in the poem's order, the succession myths, and the six beings whose parentage the sources dispute |
+| [`olympians.hmd`](greek-gods/olympians.hmd) | the gods' names in Greek, in Latin letters and unmarked, their parents and domains, the children of Zeus, their myths |
+| [`heracles.hmd`](greek-gods/heracles.hmd) | his ancestors back to Gaia, his life, and the twelve labours numbered `αʹ` to `ιβʹ` |
+| [`evidence.hmd`](greek-gods/evidence.hmd) | the Linear B attestations in the syllabary, the sanctuaries, and each god's earliest witness |
+| [`wikipedia.hmd`](greek-gods/wikipedia.hmd) | an external namespace: each being's Wikipedia article and Wikidata item, as an authored table the other documents read, and a check that it covers the ontology |
+
+`run.sh` runs the six programs under `queries/`, renders each document
+again and requires the result to be the document as committed, and runs
+the crate's own tests.
+
+Writing the case found six places where hql does not yet do what its book
+says. Each is avoided in the case and recorded, with how to show it, in
+[`doc/memory/greek-gods.hmd`](doc/memory/greek-gods.hmd).
 
 ## Running a program by hand
 

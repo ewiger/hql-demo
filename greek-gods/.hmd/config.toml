@@ -1,0 +1,5 @@
+# Greek Gods is a vault as well as a project: its .hmd documents are cards,
+# and their HQL cells run against the modules and the package that
+# .hql/config.toml configures. A document reads only files under its own
+# directory, so the documents sit at the root, above lib/myth/records/.
+wiki = "."
