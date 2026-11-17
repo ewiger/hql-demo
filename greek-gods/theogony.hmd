@@ -19,7 +19,7 @@ Every birth the *Theogony* tells, each set of parents once with the
 children the passage gives them. One parent alone means a birth without
 union: Gaia bears Uranus and Pontus by herself, and Hera bears Hephaestus.
 
-```hql
+```hql#eval
 import myth.kb
 
 fn opening(passage: String) : Int =
@@ -91,7 +91,7 @@ kb.parentage()
 The myths of the succession, in the order they happen, and where each is
 told.
 
-```hql
+```hql#eval
 import myth.kb
 import myth.stories
 
@@ -122,7 +122,7 @@ The same being, born of different parents in different works. Hesiod even
 disagrees with himself: the Moirai are daughters of Night at one point of
 the poem and of Zeus and Themis at another.
 
-```hql
+```hql#eval
 import myth.kb
 import myth.works
 from myth.genealogy import accounts, disputed
