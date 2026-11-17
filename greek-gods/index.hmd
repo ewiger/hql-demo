@@ -22,7 +22,7 @@ functions are declared in HQL without a body and implemented in Rust, in
 
 ## What it holds
 
-```hql
+```hql#eval
 import myth.kb
 import myth.evidence
 
@@ -54,7 +54,7 @@ Titans are the children of Uranus and Gaia; the elder races, the Cyclopes,
 the Hundred-Handers, the Erinyes and the Giants, are born with them. Of the
 gods, the twelve of the Parthenon frieze are marked `olympian`.
 
-```hql
+```hql#eval
 import myth.kb
 
 type Kind { kind : String, count : Int, examples : String }
@@ -84,7 +84,69 @@ The works the knowledge base cites, oldest first. A date is the work's
 approximate date of composition; Homer and Hesiod are both placed around
 700 BCE, and which came first is not known.
 
-```hql
+The later works know the earlier ones. A solid arrow is a work naming
+another or its author; a dashed one is a work telling a story an earlier
+one told, without naming it. The numbers are the later work's passage.
+
+```d2
+direction: down
+
+classes: {
+  names: {style.stroke: "#555555"}
+  retells: {style.stroke: "#555555"; style.stroke-dash: 4}
+}
+
+archaic: "c. 700 BCE" {
+  homer: Homer {
+    iliad: Iliad
+    odyssey: Odyssey
+  }
+  hesiod: Hesiod {
+    theogony: Theogony
+    wd: Works and Days
+  }
+}
+
+hymns: "Homeric Hymns, 7th–5th century BCE" {
+  demeter: Hymn to Demeter
+  apollo: Hymn to Apollo
+  hermes: Hymn to Hermes
+}
+
+classical: "5th century BCE" {
+  nemean: "Pindar, Nemean 1"
+  olympian: "Pindar, Olympian 7"
+  pb: "Aeschylus, Prometheus Bound"
+  trachis: "Sophocles, Women of Trachis"
+  heracles: "Euripides, Heracles"
+  bacchae: "Euripides, Bacchae"
+  hdt: "Herodotus, Histories"
+}
+
+roman: "1st–2nd century CE" {
+  met: "Ovid, Metamorphoses"
+  library: "Pseudo-Apollodorus, Library"
+  paus: "Pausanias, Description of Greece"
+}
+
+archaic.hesiod.wd -> archaic.hesiod.theogony: "11–26: two Strifes, not one" {class: retells}
+hymns.apollo -> archaic.homer: "172: the blind singer of Chios" {class: retells}
+classical.olympian -> archaic.hesiod.theogony: "35–38: Athena from Zeus' head" {class: retells}
+classical.pb -> archaic.hesiod.theogony: "Prometheus punished" {class: retells}
+classical.hdt -> archaic.homer: "2.53: Homer and Hesiod made the gods' genealogy" {class: names}
+classical.hdt -> archaic.hesiod {class: names}
+roman.met -> classical.trachis: "9.101–272: Heracles' death" {class: retells}
+roman.library -> archaic.hesiod.theogony: "1.3.5: Hera bears Hephaestus alone" {class: names}
+roman.library -> archaic.homer.iliad: "1.3.5: Hephaestus a son of Zeus" {class: names}
+roman.library -> hymns.demeter: "1.5.1: Persephone" {class: retells}
+roman.library -> hymns.hermes: "3.10.2: Apollo's cattle" {class: retells}
+roman.library -> classical.nemean: "2.4.8: the snakes" {class: retells}
+roman.library -> classical.heracles: "2.4.12: the madness" {class: retells}
+roman.library -> classical.bacchae: "3.5.2: Pentheus" {class: retells}
+roman.paus -> archaic.hesiod.wd: "9.31.4: the lead tablet on Helicon" {class: names}
+```
+
+```hql#eval
 import myth.kb
 
 kb.works()
@@ -120,7 +182,7 @@ These documents are the cards of a HyperMarkdown vault, and a cell can
 query the vault itself: each card, the cards it links to and the cards
 that link to it.
 
-```hql
+```hql#eval
 cards
 | sort(by = c => c.name)
 | map(c => {

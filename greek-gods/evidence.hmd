@@ -46,7 +46,7 @@ Pylos around 1200. Several Olympians are named on them, five centuries
 before Homer. The syllabary column is written by the `greek` package from
 the transliteration.
 
-```hql
+```hql#eval
 ev.tablets
 ```
 <!-- hql:output hash=fc4e7bf337c2 status=ok -->
@@ -57,7 +57,7 @@ ev.tablets
 
 Places of cult, oldest first.
 
-```hql
+```hql#eval
 ev.sites
 ```
 <!-- hql:output hash=8ac7b3fcc073 status=ok -->
@@ -71,7 +71,7 @@ written by `line`, the trait's default body. A god with no tablet is first
 named in Homer or Hesiod; Aphrodite's oldest witness is her sanctuary at
 Paphos.
 
-```hql
+```hql#eval
 ev.first
 ```
 <!-- hql:output hash=258f68949950 status=ok -->

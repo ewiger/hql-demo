@@ -21,7 +21,7 @@ the unmarked Greek come from the `greek` package, whose functions are
 declared in HQL with no body and implemented in Rust. The articles come
 from the table in the Wikipedia card, read through `@[[wikipedia]]`.
 
-```hql
+```hql#eval
 import myth.beings
 import myth.wikipedia
 
@@ -63,7 +63,7 @@ The parents each god has in the first account the knowledge base holds,
 Hesiod's where Hesiod gives one. Where the sources disagree, as they do on
 Aphrodite and Hephaestus, [[theogony]] sets the accounts side by side.
 
-```hql
+```hql#eval
 import myth.kb
 import myth.beings
 from myth.genealogy import parents_of
@@ -98,7 +98,7 @@ gods
 Every child any account gives Zeus: gods, the Muses and the Horae, and the
 mortal-born Dionysus, Perseus and Heracles.
 
-```hql
+```hql#eval
 import myth.kb
 import myth.beings
 from myth.genealogy import children_of
@@ -136,7 +136,7 @@ children_of(kb.parentage(), "zeus")
 How many of the myths in the knowledge base each god takes part in, and
 the first of them in the order the myths happen.
 
-```hql
+```hql#eval
 import myth.kb
 import myth.beings
 import myth.stories

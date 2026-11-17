@@ -29,7 +29,7 @@ Every being of the knowledge base has a row, and every row names a being.
 A check of the table against the ontology, run each time the card is
 rendered:
 
-```hql
+```hql#eval
 import myth.kb
 import myth.wikipedia
 
@@ -60,7 +60,7 @@ named = mapped | map(a => a.being)
 The articles of each kind of being, the way the ontology sorts them and
 Wikipedia does not.
 
-```hql
+```hql#eval
 import myth.kb
 import myth.beings
 import myth.wikipedia

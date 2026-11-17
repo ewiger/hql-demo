@@ -189,8 +189,11 @@ importing `greek` itself.
 ## The documents
 
 Each `.hmd` file is a card of the vault this folder declares. A fenced
-block marked `hql` is a cell: `id=name` shares its value with the
-document's other cells, and `hidden` runs it without output. Rendering a
+block marked `hql#eval` is a cell: `id=name` shares its value with the
+document's other cells, and `hidden` runs it without output. `hql render`
+also runs a bare `hql` fence, but the HyperMarkdown editor shows one as a
+listing that never runs, so the cells are marked `hql#eval` and the editor
+can draw each output with its code and run it. Rendering a
 document writes each cell's output below the cell, between
 `<!-- hql:output -->` markers:
 

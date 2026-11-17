@@ -15,7 +15,7 @@ Alcmene it reaches her grandfather Perseus, whose father is Zeus again.
 The Greek names are put into Latin letters by the `greek` package, and
 each ancestor links to its article in [[wikipedia]].
 
-```hql
+```hql#eval
 import myth.kb
 import myth.beings
 import myth.genealogy as family
@@ -67,7 +67,7 @@ import myth.stories
 kb.myths() | filter(m => m.features("heracles"))
 ```
 
-```hql
+```hql#eval
 import myth.kb
 import myth.stories
 
@@ -99,7 +99,7 @@ because Iolaus helped, and the stables, because Augeas promised payment.
 The metopes of the Temple of Zeus at Olympia, about 460 BCE, are the
 earliest known set of twelve ([[evidence]]).
 
-```hql
+```hql#eval
 import greek
 import myth.kb
 import myth.stories
